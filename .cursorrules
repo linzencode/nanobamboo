@@ -1,0 +1,584 @@
+# Flutter/Dart 项目开发规范
+
+您是一名高级 Dart 程序员，具有 Flutter 框架的丰富经验，偏好干净的编程和设计模式。
+
+生成符合基本原则和命名规范的代码、修正和重构。
+
+---
+
+## 核心原则
+
+- 代码和文档根据项目需求使用中文或英文（个人项目推荐中文注释，便于维护）
+- 始终声明变量和函数的类型（参数和返回值），避免使用 dynamic
+- 每个文件应有一个主要的公开类，辅助类可内部使用
+- 不要在函数内部留空行（保持紧凑）
+- 创建必要的类型，避免滥用原始类型
+
+---
+
+## Dart 语言规范
+
+### 类型系统和空安全
+
+#### 空安全基础
+- 明确声明可空类型（String?）和非空类型（String）
+- 可空变量必须先检查或提供默认值后才能使用
+
+#### 空值处理操作符
+- 优先使用 ?? 提供默认值
+- 使用 ?. 进行安全访问
+- 使用 ??= 进行条件赋值
+- 谨慎使用非空断言 !，只在确定非空时使用
+- 避免滥用 ! 操作符
+
+#### late 关键字
+- 用于延迟初始化，但保证使用前赋值
+- 常用于 Widget 中的 Controller 初始化
+- 避免延迟初始化后忘记赋值
+
+#### required 参数
+- 必需的命名参数使用 required 标记
+- Widget 的关键属性应使用 required
+- 可选字段不使用 required
+
+#### 空安全最佳实践
+- 使用类型守卫进行空检查
+- 使用 assert 进行调试检查
+- 避免对非空类型进行不必要的空检查
+
+---
+
+### 命名规范
+
+#### 基本命名规则
+- 类名使用 PascalCase
+- 变量、函数、方法使用 camelCase
+- 文件和目录使用 snake_case
+- 常量使用 lowerCamelCase（Dart 推荐）
+- 枚举值使用 lowerCamelCase
+- 私有成员使用下划线前缀
+
+#### 语义化命名
+- 布尔变量使用 is/has/can/should 等前缀
+- 函数命名以动词开头
+- 返回布尔值的方法使用 is/has/can 前缀
+- 事件回调使用 on 前缀
+
+#### 避免缩写
+- 使用完整单词，确保拼写正确
+- 避免不明确的缩写
+- 例外：公认的缩写（API、URL、ID、HTML）
+- 例外：循环中的标准缩写（i、j）
+
+---
+
+### 函数设计
+
+#### 函数长度和职责
+- 保持函数简短（建议 20-30 行）
+- 函数功能单一，职责明确
+- 过长的函数应拆分为多个小函数
+
+#### 提前返回
+- 提前检查并返回，减少嵌套
+- 优先处理异常情况和边界条件
+- 避免深度嵌套的 if-else
+
+#### 参数设计
+- 3 个以上参数时使用命名参数
+- 使用默认参数值
+- 参数过多时考虑封装为对象
+- 调用时参数清晰明了
+
+#### 高阶函数
+- 使用 map、where、reduce 等高阶函数
+- 简洁逻辑使用箭头函数
+- 复杂逻辑使用具名函数
+- 避免过长的箭头函数
+
+---
+
+### 类设计
+
+#### SOLID 原则
+- 单一职责：每个类只做一件事
+- 开放封闭：对扩展开放，对修改封闭
+- 里氏替换：子类可以替换父类
+- 接口隔离：接口应该小而专注
+- 依赖倒置：依赖抽象而非具体实现
+
+#### 类大小控制
+- 代码行数少于 200
+- 公共方法少于 10 个
+- 属性少于 10 个
+- 类过大时考虑拆分
+
+#### 组合优于继承
+- 优先使用组合而非继承
+- 避免深度继承链
+- 通过组合实现代码复用
+
+#### 不可变对象
+- 优先使用不可变类
+- 使用 final 声明属性
+- 使用 const 构造函数
+- 需要修改时返回新对象（copyWith）
+
+---
+
+### 异步编程规范
+
+#### async/await 基础
+- 使用 async/await 而非回调
+- 异步函数返回 Future 类型
+- 避免回调地狱
+
+#### 异步错误处理
+- 使用 try-catch 处理异步错误
+- 捕获特定异常类型
+- finally 块用于清理工作
+- 避免忽略错误
+
+#### Future vs Stream
+- Future 用于单次异步操作
+- Stream 用于多次异步事件
+- 根据场景选择合适的类型
+
+#### 并发控制
+- 使用 Future.wait 并行执行多个请求
+- 设置超时控制
+- 实现重试机制
+- 避免过多并发请求
+
+#### 避免异步陷阱
+- 不要在 initState 中使用 await
+- 不要在 build 方法中直接调用异步方法
+- 使用 FutureBuilder 或 StreamBuilder
+- 注意异步回调中的 BuildContext 使用
+
+---
+
+### 异常处理
+
+#### 自定义异常
+- 创建有意义的异常类
+- 异常类实现 Exception 接口
+- 包含必要的错误信息和上下文
+
+#### 全局错误处理
+- 在 main.dart 中设置全局错误处理
+- 捕获 Flutter 框架错误
+- 捕获 Dart 异步错误
+- 生产环境上报错误到服务器
+
+#### 错误处理最佳实践
+- 捕获特定异常而非所有异常
+- 不要吞掉异常（空 catch）
+- 至少记录日志
+- 为用户提供友好的错误提示
+
+---
+
+## Flutter 特定规范
+
+### Widget 生命周期管理
+
+#### StatelessWidget vs StatefulWidget
+- 只展示数据无内部状态时使用 StatelessWidget
+- 需要管理内部状态时使用 StatefulWidget
+- 使用 GetX 时：Controller 管理状态，Widget 使用 StatelessWidget + Obx
+- 能用 StatelessWidget 就不用 StatefulWidget
+
+#### StatefulWidget 生命周期
+- initState：初始化控制器、添加监听器、调用异步方法
+- didChangeDependencies：访问 InheritedWidget、获取 Theme 等
+- build：构建 UI，不要调用异步方法或修改状态
+- didUpdateWidget：比较新旧 Widget 属性、更新配置
+- dispose：释放控制器、移除监听器、取消订阅
+
+#### BuildContext 使用
+- 在 build 方法中直接使用是安全的
+- 在同步回调中使用是安全的
+- 在异步回调中使用需检查 mounted
+- 不要存储 BuildContext 作为成员变量
+- 异步操作后使用前检查 Widget 是否还存在
+
+#### Key 的使用
+- ValueKey：基于值的唯一性
+- ObjectKey：基于对象的唯一性
+- UniqueKey：每次生成新的 Key
+- GlobalKey：需要访问 Widget 的 State
+- 列表项重新排序时使用 Key
+- 列表项增删时使用 Key
+- 同类型 Widget 需要保持独立状态时使用 Key
+
+---
+
+### GetX 使用规范（个人项目优化版）
+
+#### Controller 管理
+- 每个页面或功能模块一个 Controller
+- Controller 继承 GetxController
+- 在 onInit 中初始化
+- 在 onClose 中清理资源
+- Controller 只负责业务逻辑，不包含 UI 代码
+
+#### 响应式变量
+- 只对需要触发 UI 更新的变量使用 .obs
+- 不需要更新 UI 的使用普通变量
+- 复杂对象整体更新
+- 避免过度使用 .obs
+
+#### 依赖注入
+- 在 main.dart 中注册全局服务
+- 使用 Get.put 立即注册
+- 使用 Get.lazyPut 延迟注册
+- 使用 Get.find 获取依赖
+- 页面级 Controller 在页面创建时注入
+
+#### 路由管理
+- 定义路由常量类
+- 使用命名路由
+- 通过 Get.toNamed 跳转
+- 通过 Get.arguments 传递参数
+- 避免魔法字符串路由名
+
+#### 资源清理
+- 重写 onClose 方法
+- 释放所有 Controller
+- 移除所有监听器
+- 取消所有订阅
+- 避免内存泄漏
+
+---
+
+### 项目结构规范
+
+#### 标准目录结构（GetX 版本）
+- app/：应用配置层（routes、theme、constants）
+- core/：核心功能层（network、storage、utils）
+- data/：数据层（models、services）
+- modules/：功能模块（controllers、views、widgets）
+- shared/：共享层（widgets、extensions）
+- main.dart：应用入口
+
+#### 文件组织原则
+- 一个文件一个主要的公开类
+- 辅助类可以放在同一文件
+- 相关的类可以组织在一起
+- 文件名使用 snake_case
+
+#### 导入顺序
+- Dart SDK 导入
+- Flutter 导入
+- 第三方包导入（按字母排序）
+- 项目内部导入（按功能分组）
+- 各组之间空一行
+
+---
+
+### 网络请求规范
+
+#### HTTP 客户端封装
+- 使用 Dio 或 http 封装
+- 单例模式创建客户端
+- 配置 baseUrl、超时时间
+- 添加默认 headers
+
+#### 请求拦截器
+- 认证拦截器：添加 token
+- 日志拦截器：记录请求和响应
+- 错误拦截器：统一错误处理
+- 根据状态码处理不同错误
+
+#### API 服务层
+- 封装 API 服务类
+- 每个服务对应一个业务模块
+- 方法名语义化
+- 返回类型明确
+
+#### 数据模型
+- 使用 fromJson 和 toJson 方法
+- 所有字段使用 final
+- 提供 copyWith 方法
+- 考虑使用 json_serializable 或 freezed
+
+---
+
+### 错误处理和日志
+
+#### 全局错误捕获
+- 捕获 Flutter 框架错误（FlutterError.onError）
+- 捕获 Dart 异步错误（runZonedGuarded）
+- 开发环境打印详细信息
+- 生产环境上报到服务器
+
+#### 日志管理
+- 封装日志工具类
+- 区分日志级别（debug、info、warning、error）
+- 开发环境启用日志
+- 生产环境关闭 debug 日志
+- 错误日志上报到服务器
+
+---
+
+### 路由和导航（GetX 详细规范）
+
+#### 路由配置
+- 定义路由常量类（Routes）
+- 配置路由页面映射（AppPages）
+- 设置页面过渡动画
+- 配置路由绑定（Binding）
+
+#### 路由跳转
+- Get.to：跳转到新页面
+- Get.toNamed：命名路由跳转
+- Get.back：返回上一页
+- Get.off：替换当前页面
+- Get.offAll：清空栈并跳转
+- 使用 arguments 传递参数
+- 使用 parameters 获取路径参数
+- 等待返回结果用 await
+
+#### 路由中间件
+- 自定义中间件类
+- 实现权限检查
+- 实现登录检查
+- 页面访问控制
+
+---
+
+### UI 和主题规范
+
+#### 主题配置
+- 定义颜色常量类
+- 定义主题数据类
+- 支持亮色和暗色主题
+- 统一配置 AppBar、Button 等样式
+- 使用 ThemeData 而非硬编码
+
+#### 响应式布局
+- 使用 MediaQuery 获取屏幕信息
+- 使用 LayoutBuilder 动态布局
+- 根据屏幕宽度调整布局
+- 适配平板和手机
+- 处理横竖屏切换
+
+#### 自定义组件封装
+- 封装通用组件
+- 提供必要的自定义属性
+- 使用 const 构造函数
+- 组件功能单一
+- 易于复用和维护
+
+---
+
+### 数据持久化规范
+
+#### SharedPreferences 封装
+- 封装 Storage 服务类
+- 提供通用的 get/set 方法
+- 提供业务方法（如 saveToken）
+- 在 main.dart 中初始化
+- 使用 GetxService 管理生命周期
+
+#### 安全存储
+- 敏感数据使用 flutter_secure_storage
+- 密码、Token 等加密存储
+- 不要在 SharedPreferences 存储敏感信息
+- 定期清理过期数据
+
+---
+
+### 性能优化
+
+#### Widget 重建优化
+- 使用 const 构造函数
+- 提取静态 Widget 避免重复创建
+- 使用 RepaintBoundary 隔离重绘区域
+- 避免在 build 中创建新对象
+- 使用 Key 优化列表重建
+
+#### 列表优化
+- 使用 ListView.builder 而非 ListView
+- 使用 GridView.builder 而非 GridView
+- 使用 separated 添加分隔符
+- 长列表使用虚拟滚动
+- 实现分页加载
+
+#### 图片优化
+- 使用 cached_network_image 缓存图片
+- 限制图片缓存大小
+- 提供占位图和错误图
+- 使用合适的图片尺寸
+- 避免加载过大的图片
+
+#### 内存泄漏防范
+- 及时 dispose 所有 Controller
+- 移除所有监听器
+- 取消所有订阅
+- 释放所有资源
+- 避免循环引用
+
+---
+
+### 测试规范（个人项目简化版）
+
+#### 单元测试
+- 测试核心业务逻辑
+- 测试工具函数
+- 测试数据模型
+- 使用 setUp 初始化
+- 使用 group 组织测试
+
+#### Widget 测试
+- 测试关键 Widget
+- 测试用户交互
+- 测试 Widget 状态变化
+- 使用 pumpWidget 渲染
+- 使用 find 查找元素
+
+---
+
+### 安全性规范
+
+#### API Key 管理
+- 使用环境变量存储 API Key
+- 使用 flutter_dotenv 读取配置
+- .env 文件不提交到 Git
+- 不要硬编码敏感信息
+- 区分开发和生产环境配置
+
+#### HTTPS 证书校验
+- 生产环境启用证书校验
+- 开发环境可以跳过（仅测试）
+- 避免中间人攻击
+- 使用安全的网络连接
+
+#### 代码混淆
+- 发布时开启代码混淆
+- 使用 --obfuscate 参数
+- 保存符号表用于崩溃分析
+- 保护源代码不被反编译
+
+---
+
+## 代码质量和工具
+
+### Linter 配置
+
+#### 推荐规则
+- always_declare_return_types：始终声明返回类型
+- always_require_non_null_named_parameters：非空命名参数必需
+- avoid_print：避免使用 print
+- avoid_dynamic_calls：避免动态调用
+- prefer_const_constructors：优先使用 const 构造函数
+- prefer_const_declarations：优先使用 const 声明
+- prefer_final_fields：优先使用 final 字段
+- prefer_final_locals：优先使用 final 局部变量
+- require_trailing_commas：多参数时强制尾部逗号
+- sort_constructors_first：构造函数排在前面
+- unnecessary_this：避免不必要的 this
+
+#### 错误配置
+- missing_required_param 设为 error
+- missing_return 设为 error
+- 排除生成的代码文件（*.g.dart、*.freezed.dart）
+
+---
+
+### 扩展方法
+
+#### 使用场景
+- 为现有类型添加便捷方法
+- 提高代码可读性
+- 封装常用操作
+- 避免工具类
+
+#### 最佳实践
+- 扩展方法命名语义化
+- 不要滥用扩展方法
+- 扩展方法保持简单
+- 组织到 extensions 目录
+
+---
+
+### 文档注释
+
+#### 文档编写
+- 为公开 API 编写文档注释
+- 使用三斜杠（///）注释
+- 包含功能描述
+- 包含参数说明
+- 包含使用示例
+
+#### 注释原则
+- 复杂逻辑添加注释
+- 非显而易见的代码添加注释
+- 不要注释显而易见的代码
+- 保持注释与代码同步
+- 注释应解释"为什么"而非"是什么"
+
+---
+
+## 其他规范
+
+### Widget 设计原则
+- 避免深度嵌套的 Widget 树
+- 将大型 Widget 拆分为小型组件
+- 保持 Widget 树扁平化
+- 提高代码可读性和可维护性
+- 优化性能和内存使用
+
+### 状态管理
+- 根据场景选择合适的状态管理方案
+- 简单局部状态使用 setState
+- 跨组件状态使用 GetX（推荐）
+- 复杂状态可考虑 Provider、Riverpod、Bloc
+- 避免全局状态滥用
+
+### 依赖管理
+- pubspec.yaml 组织清晰
+- 区分 dependencies 和 dev_dependencies
+- 锁定关键依赖版本
+- 定期更新依赖包
+- 评估第三方包的质量和维护状态
+
+### 代码生成
+- 使用 build_runner 生成代码
+- 支持 Freezed、json_serializable 等
+- 修改注解类后重新生成
+- 生成的文件不要手动修改
+- 将生成的文件添加到 .gitignore（可选）
+
+---
+
+## 总结
+
+### 核心要点
+- 类型安全：始终声明类型，善用空安全
+- 异步编程：使用 async/await，正确处理错误
+- Widget 管理：理解生命周期，合理使用 Key
+- GetX 规范：Controller 单一职责，及时清理资源
+- 项目结构：按功能模块组织，清晰的分层
+- 网络请求：封装 HTTP 客户端，统一错误处理
+- 性能优化：const 构造函数，列表 builder，及时 dispose
+- 代码质量：使用 linter，编写测试，文档注释
+
+### 开发建议
+- 优先考虑代码可读性和可维护性
+- 遵循 DRY 原则（Don't Repeat Yourself）
+- 遵循 KISS 原则（Keep It Simple, Stupid）
+- 定期重构代码
+- 持续学习和改进
+
+### 参考资源
+- Dart 官方文档
+- Flutter 官方文档
+- Effective Dart
+- GetX 文档
+- Flutter 社区最佳实践
+- 界面视图库 [ducafe_ui_core packages](https://pub.dev/packages/ducafe_ui_core)
+---
+
+**本规则文档持续更新，请根据项目实际情况调整。**
