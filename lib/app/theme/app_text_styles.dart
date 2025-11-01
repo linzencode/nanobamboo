@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// 应用文本样式
 class AppTextStyles {
   AppTextStyles._();
 
-  // 基础字体
-  static TextStyle get baseTextStyle => GoogleFonts.inter();
+  // 基础字体（使用系统字体栈，确保中文立即显示）
+  static const TextStyle baseTextStyle = TextStyle(
+    fontFamily: 'Inter',
+    fontFamilyFallback: [
+      'SF Pro Text',
+      'SF Pro Display',
+      'PingFang SC',
+      'Noto Sans SC',
+      'Microsoft YaHei',
+      'Segoe UI',
+      'Roboto',
+      'Arial',
+      'sans-serif',
+    ],
+  );
 
   // 标题样式
   static TextStyle get h1 => baseTextStyle.copyWith(

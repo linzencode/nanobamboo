@@ -1,4 +1,4 @@
-# NanoBanana - AI 图像处理平台
+# NanoBamboo - AI 图像处理平台
 
 基于 Flutter 开发的 AI 图像处理平台，提供专业级的图像处理和分析功能。
 
@@ -77,5 +77,5 @@ flutter build ios
 
 ## 许可证
 
-Copyright © 2025 NanoBanana. All rights reserved.
+Copyright © 2025 NanoBamboo. All rights reserved.
 

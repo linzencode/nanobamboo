@@ -11,7 +11,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         primary: AppColors.primary,
         secondary: AppColors.secondary,
         surface: AppColors.lightBackground,
@@ -20,7 +20,7 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: AppColors.lightBackground,
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.lightBackground.withOpacity(0.8),
+        backgroundColor: AppColors.lightBackground.withValues(alpha: 0.8),
         foregroundColor: AppColors.lightForeground,
         elevation: 0,
         centerTitle: false,
@@ -125,7 +125,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      colorScheme: ColorScheme.dark(
+      colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
         secondary: AppColors.secondary,
         surface: AppColors.darkBackground,
@@ -134,7 +134,7 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: AppColors.darkBackground,
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.darkBackground.withOpacity(0.8),
+        backgroundColor: AppColors.darkBackground.withValues(alpha: 0.8),
         foregroundColor: AppColors.darkForeground,
         elevation: 0,
         centerTitle: false,

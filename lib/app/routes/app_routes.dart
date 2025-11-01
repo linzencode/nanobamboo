@@ -5,6 +5,9 @@ class AppRoutes {
   /// 首页路由
   static const String home = '/home';
 
+  /// 认证页面路由
+  static const String auth = '/auth';
+
   /// 初始路由
   static const String initial = home;
 }

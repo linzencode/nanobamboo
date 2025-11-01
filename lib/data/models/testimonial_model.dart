@@ -1,23 +1,5 @@
 /// 用户评价数据模型
 class TestimonialModel {
-  /// ID
-  final int id;
-
-  /// 姓名
-  final String name;
-
-  /// 角色/职位
-  final String role;
-
-  /// 评价内容
-  final String content;
-
-  /// 评分
-  final int rating;
-
-  /// 头像（emoji 或图片路径）
-  final String avatar;
-
   const TestimonialModel({
     required this.id,
     required this.name,
@@ -38,6 +20,24 @@ class TestimonialModel {
       avatar: json['avatar'] as String,
     );
   }
+
+  /// ID
+  final int id;
+
+  /// 姓名
+  final String name;
+
+  /// 角色/职位
+  final String role;
+
+  /// 评价内容
+  final String content;
+
+  /// 评分
+  final int rating;
+
+  /// 头像（emoji 或图片路径）
+  final String avatar;
 
   /// 转换为 JSON
   Map<String, dynamic> toJson() {

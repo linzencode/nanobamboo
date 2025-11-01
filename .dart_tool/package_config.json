@@ -44,12 +44,6 @@
       "languageVersion": "3.7"
     },
     {
-      "name": "crypto",
-      "rootUri": "file:///Users/charles/.pub-cache/hosted/pub.dev/crypto-3.0.6",
-      "packageUri": "lib/",
-      "languageVersion": "3.4"
-    },
-    {
       "name": "ducafe_ui_core",
       "rootUri": "file:///Users/charles/.pub-cache/hosted/pub.dev/ducafe_ui_core-1.0.6",
       "packageUri": "lib/",
@@ -138,12 +132,6 @@
       "rootUri": "file:///Users/charles/.pub-cache/hosted/pub.dev/get-4.7.2",
       "packageUri": "lib/",
       "languageVersion": "2.15"
-    },
-    {
-      "name": "google_fonts",
-      "rootUri": "file:///Users/charles/.pub-cache/hosted/pub.dev/google_fonts-6.3.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.7"
     },
     {
       "name": "http",
@@ -264,24 +252,6 @@
       "rootUri": "file:///Users/charles/.pub-cache/hosted/pub.dev/path_parsing-1.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
-    },
-    {
-      "name": "path_provider",
-      "rootUri": "file:///Users/charles/.pub-cache/hosted/pub.dev/path_provider-2.1.5",
-      "packageUri": "lib/",
-      "languageVersion": "3.4"
-    },
-    {
-      "name": "path_provider_android",
-      "rootUri": "file:///Users/charles/.pub-cache/hosted/pub.dev/path_provider_android-2.2.20",
-      "packageUri": "lib/",
-      "languageVersion": "3.9"
-    },
-    {
-      "name": "path_provider_foundation",
-      "rootUri": "file:///Users/charles/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.3",
-      "packageUri": "lib/",
-      "languageVersion": "3.9"
     },
     {
       "name": "path_provider_linux",

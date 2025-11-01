@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nanobamboo/app/theme/app_colors.dart';
 import 'package:nanobamboo/app/theme/app_text_styles.dart';
 import 'package:nanobamboo/core/utils/responsive_utils.dart';
+import 'package:nanobamboo/modules/home/controllers/home_controller.dart';
 import 'package:nanobamboo/shared/widgets/app_button.dart';
 
 /// Hero 首屏组件
@@ -30,7 +32,7 @@ class HeroWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppColors.secondary.withOpacity(0.1),
+                    AppColors.secondary.withValues(alpha: 0.1),
                     Colors.transparent,
                   ],
                   begin: Alignment.centerLeft,
@@ -49,7 +51,7 @@ class HeroWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppColors.secondary.withOpacity(0.1),
+                    AppColors.secondary.withValues(alpha: 0.1),
                     Colors.transparent,
                   ],
                   begin: Alignment.centerRight,
@@ -97,10 +99,10 @@ class HeroWidget extends StatelessWidget {
                     '专业级图像处理，由前沿 AI 驱动。上传、分析并在几秒钟内增强您的图像。',
                     style: isMobile
                         ? AppTextStyles.bodyMedium.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.7),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                           )
                         : AppTextStyles.bodyLarge.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.7),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
                     textAlign: TextAlign.center,
                   ),
@@ -115,13 +117,19 @@ class HeroWidget extends StatelessWidget {
                     children: [
                       AppButton(
                         text: '开始处理',
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.find<HomeController>()
+                              .scrollToSection(Get.find<HomeController>().featuresKey);
+                        },
                         type: AppButtonType.primary,
                         isRounded: true,
                       ),
                       AppButton(
                         text: '查看演示',
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.find<HomeController>()
+                              .scrollToSection(Get.find<HomeController>().showcaseKey);
+                        },
                         type: AppButtonType.outline,
                         isRounded: true,
                       ),

@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-成功将 **NanoBanana AI 图像处理平台** 从 Next.js/React 完整迁移到 Flutter+Dart。
+成功将 **NanoBamboo AI 图像处理平台** 从 Next.js/React 完整迁移到 Flutter+Dart。
 
 ## 迁移完成情况
 

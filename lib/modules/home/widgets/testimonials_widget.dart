@@ -12,7 +12,6 @@ class TestimonialsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
-    final theme = Theme.of(context);
     final isMobile = ResponsiveUtils.isMobile(context);
 
     return Container(
@@ -20,7 +19,6 @@ class TestimonialsWidget extends StatelessWidget {
         horizontal: ResponsiveUtils.getResponsiveSpacing(context),
         vertical: isMobile ? 60 : 80,
       ),
-      color: theme.colorScheme.surface.withOpacity(0.5),
       child: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 1280),
@@ -28,7 +26,7 @@ class TestimonialsWidget extends StatelessWidget {
             children: [
               const SectionTitle(
                 title: '全球用户喜爱',
-                subtitle: '加入数千名信任 NanoBanana 满足其图像处理需求的专业人士',
+                subtitle: '加入数千名信任 NanoBamboo 满足其图像处理需求的专业人士',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 64),
@@ -38,7 +36,7 @@ class TestimonialsWidget extends StatelessWidget {
                     context: context,
                     mobile: 1,
                     tablet: 2,
-                    desktop: 4,
+                    desktop: 3,
                   );
 
                   return GridView.builder(
@@ -48,7 +46,7 @@ class TestimonialsWidget extends StatelessWidget {
                       crossAxisCount: columns,
                       crossAxisSpacing: 24,
                       mainAxisSpacing: 24,
-                      childAspectRatio: isMobile ? 1.2 : 0.9,
+                      childAspectRatio: isMobile ? 0.9 : 1.1,
                     ),
                     itemCount: controller.testimonials.length,
                     itemBuilder: (context, index) {
@@ -81,25 +79,56 @@ class TestimonialsWidget extends StatelessWidget {
     String avatar,
   ) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(12),
+        color: isDark ? theme.cardColor : AppColors.lightCard,
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: theme.dividerColor,
+          color: isDark ? theme.dividerColor : const Color(0xFFF0E5C8),
+          width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark 
+                ? Colors.black.withValues(alpha: 0.3)
+                : Colors.black.withValues(alpha: 0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
+            spreadRadius: 0,
+          ),
+          BoxShadow(
+            color: isDark 
+                ? Colors.black.withValues(alpha: 0.2)
+                : Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+            spreadRadius: -2,
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           // 头像和信息
           Row(
             children: [
-              Text(
-                avatar,
-                style: const TextStyle(fontSize: 32),
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: _getAvatarColor(avatar),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    avatar,
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -110,13 +139,15 @@ class TestimonialsWidget extends StatelessWidget {
                       name,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
                     Text(
                       role,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        fontSize: 14,
                       ),
                     ),
                   ],
@@ -124,31 +155,38 @@ class TestimonialsWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-
-          // 评分
-          Row(
-            children: List.generate(
-              rating,
-              (index) => const Icon(
-                Icons.star,
-                size: 16,
-                color: AppColors.primary,
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
 
           // 评价内容
-          Text(
-            '"$content"',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.8),
+          Flexible(
+            child: Text(
+              '"$content"',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                fontSize: 14,
+                height: 1.6,
+              ),
+              maxLines: 6,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
       ),
     );
+  }
+
+  Color _getAvatarColor(String avatar) {
+    // 根据不同的 emoji 返回不同的背景色
+    switch (avatar) {
+      case '👨‍💼':
+        return const Color(0xFFFDB022).withValues(alpha: 0.2);
+      case '👩‍💻':
+        return const Color(0xFFFF6B2C).withValues(alpha: 0.2);
+      case '👨‍🎨':
+        return const Color(0xFFE63946).withValues(alpha: 0.2);
+      default:
+        return AppColors.primary.withValues(alpha: 0.2);
+    }
   }
 }
 

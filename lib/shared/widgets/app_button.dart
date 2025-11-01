@@ -15,6 +15,18 @@ enum AppButtonType {
 
 /// 自定义按钮组件
 class AppButton extends StatelessWidget {
+  const AppButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.type = AppButtonType.primary,
+    this.isRounded = true,
+    this.icon,
+    this.isLoading = false,
+    this.width,
+    this.height,
+  });
+
   /// 按钮文本
   final String text;
 
@@ -38,18 +50,6 @@ class AppButton extends StatelessWidget {
 
   /// 高度
   final double? height;
-
-  const AppButton({
-    required this.text,
-    required this.onPressed,
-    this.type = AppButtonType.primary,
-    this.isRounded = true,
-    this.icon,
-    this.isLoading = false,
-    this.width,
-    this.height,
-    super.key,
-  });
 
   @override
   Widget build(BuildContext context) {

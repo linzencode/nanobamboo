@@ -13,7 +13,6 @@ class FaqWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
-    final theme = Theme.of(context);
     final isMobile = ResponsiveUtils.isMobile(context);
 
     return Container(
@@ -28,7 +27,7 @@ class FaqWidget extends StatelessWidget {
             children: [
               const SectionTitle(
                 title: '常见问题',
-                subtitle: '关于 NanoBanana 您需要了解的一切',
+                subtitle: '关于 NanoBamboo 您需要了解的一切',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 48),
@@ -63,18 +62,30 @@ class FaqWidget extends StatelessWidget {
     String answer,
   ) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Obx(() {
       final isExpanded = controller.expandedFaqId.value == id;
 
       return Container(
         decoration: BoxDecoration(
+          color: isDark ? theme.cardColor : AppColors.lightCard,
           border: Border.all(
             color: isExpanded
-                ? AppColors.primary.withOpacity(0.5)
-                : theme.dividerColor,
+                ? AppColors.primary.withValues(alpha: 0.5)
+                : (isDark ? theme.dividerColor : const Color(0xFFF0E5C8)),
           ),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: isDark 
+                  ? Colors.black.withValues(alpha: 0.3)
+                  : Colors.black.withValues(alpha: 0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 2),
+              spreadRadius: 0,
+            ),
+          ],
         ),
         child: Column(
           children: [
@@ -94,13 +105,9 @@ class FaqWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    AnimatedRotation(
-                      turns: isExpanded ? 0.5 : 0,
-                      duration: AppConstants.shortAnimationDuration,
-                      child: Icon(
-                        Icons.add,
-                        color: AppColors.primary,
-                      ),
+                    Icon(
+                      isExpanded ? Icons.remove : Icons.add,
+                      color: AppColors.primary,
                     ),
                   ],
                 ),
@@ -129,7 +136,7 @@ class FaqWidget extends StatelessWidget {
                   child: Text(
                     answer,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
                 ),

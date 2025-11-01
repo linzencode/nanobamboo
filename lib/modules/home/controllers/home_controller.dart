@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nanobamboo/app/constants/image_assets.dart';
@@ -9,6 +10,15 @@ import 'package:nanobamboo/data/models/testimonial_model.dart';
 
 /// 首页控制器
 class HomeController extends GetxController {
+  /// 滚动控制器
+  final ScrollController scrollController = ScrollController();
+
+  /// 各个 section 的 GlobalKey
+  final GlobalKey featuresKey = GlobalKey();
+  final GlobalKey showcaseKey = GlobalKey();
+  final GlobalKey testimonialsKey = GlobalKey();
+  final GlobalKey faqKey = GlobalKey();
+
   /// 移动端菜单是否打开
   final RxBool isMobileMenuOpen = false.obs;
 
@@ -20,6 +30,33 @@ class HomeController extends GetxController {
 
   /// 当前展开的 FAQ ID
   final RxnInt expandedFaqId = RxnInt(0);
+
+  /// 生成模式（image: 图生图, text: 文生图）
+  final RxString generationMode = 'image'.obs;
+
+  /// 参考图像列表
+  final RxList<File> referenceImages = <File>[].obs;
+
+  /// 主提示词文本控制器
+  final TextEditingController promptController = TextEditingController();
+
+  /// AI模型选择器焦点节点
+  final FocusNode modelSelectorFocusNode = FocusNode();
+
+  /// AI模型选择器是否获得焦点
+  final RxBool isModelSelectorFocused = false.obs;
+
+  /// AI生成状态 (idle, loading, completed, error)
+  final RxString generationStatus = 'idle'.obs;
+
+  /// 生成进度 (0-100)
+  final RxInt generationProgress = 0.obs;
+
+  /// 预计剩余时间（秒）
+  final RxInt estimatedTime = 0.obs;
+
+  /// 生成结果图片URL（用占位图模拟）
+  final RxString generatedImageUrl = ''.obs;
 
   /// 图片选择器
   final ImagePicker _picker = ImagePicker();
@@ -62,7 +99,7 @@ class HomeController extends GetxController {
       id: 1,
       name: '陈小雅',
       role: '电商经理',
-      content: 'NanoBanana 彻底改变了我们的产品摄影工作流程。AI 增强功能非常快速，产生专业的效果。',
+      content: 'NanoBamboo 彻底改变了我们的产品摄影工作流程。AI 增强功能非常快速，产生专业的效果。',
       rating: 5,
       avatar: '👩‍💼',
     ),
@@ -96,7 +133,7 @@ class HomeController extends GetxController {
   final List<FaqModel> faqs = const [
     FaqModel(
       id: 0,
-      question: 'NanoBanana 支持哪些图片格式？',
+      question: 'NanoBamboo 支持哪些图片格式？',
       answer: '我们支持所有主要的图像格式，包括 PNG、JPG、WebP、JPEG 和 GIF。最大可处理 10MB 的文件。',
     ),
     FaqModel(
@@ -111,7 +148,7 @@ class HomeController extends GetxController {
     ),
     FaqModel(
       id: 3,
-      question: '我可以将 NanoBanana 用于商业用途吗？',
+      question: '我可以将 NanoBamboo 用于商业用途吗？',
       answer: '可以，我们的专业版和企业版计划完全支持商业用途。处理后的图像归您所有，可以自由使用。',
     ),
     FaqModel(
@@ -125,6 +162,15 @@ class HomeController extends GetxController {
       answer: '是的！我们提供强大的 REST API 和 Python、Node.js 和 Go 的 SDK。非常适合集成到您的应用程序中。',
     ),
   ];
+
+  @override
+  void onInit() {
+    super.onInit();
+    // 监听AI模型选择器焦点变化
+    modelSelectorFocusNode.addListener(() {
+      isModelSelectorFocused.value = modelSelectorFocusNode.hasFocus;
+    });
+  }
 
   /// 切换移动端菜单
   void toggleMobileMenu() {
@@ -176,7 +222,7 @@ class HomeController extends GetxController {
     isProcessing.value = true;
 
     // 模拟处理延迟
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future<void>.delayed(const Duration(milliseconds: 300));
 
     isProcessing.value = false;
 
@@ -195,11 +241,97 @@ class HomeController extends GetxController {
     isProcessing.value = false;
   }
 
+  /// 滚动到指定 section
+  void scrollToSection(GlobalKey key) {
+    final context = key.currentContext;
+    if (context != null) {
+      // 关闭移动端菜单
+      closeMobileMenu();
+
+      // 滚动到目标位置
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeInOut,
+        alignment: 0.1, // 顶部留 10% 空间
+      );
+    }
+  }
+
   @override
   void onClose() {
     // 清理资源
+    scrollController.dispose();
+    promptController.dispose();
+    modelSelectorFocusNode.dispose();
     uploadedImage.value = null;
+    resetGeneration();
     super.onClose();
+  }
+  
+  /// 复制主提示词内容
+  void copyPrompt() {
+    if (promptController.text.isNotEmpty) {
+      Clipboard.setData(ClipboardData(text: promptController.text));
+      Get.snackbar(
+        '复制成功',
+        '已复制提示词内容',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+        backgroundColor: const Color(0xFFF97316).withValues(alpha: 0.9),
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  /// 开始AI图像生成
+  Future<void> startGeneration() async {
+    if (promptController.text.isEmpty) {
+      Get.snackbar(
+        '提示',
+        '请输入主提示词',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: const Color(0xFFF97316).withValues(alpha: 0.9),
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    // 设置为加载状态
+    generationStatus.value = 'loading';
+    generationProgress.value = 0;
+    estimatedTime.value = 60;
+
+    // 模拟进度更新
+    for (int i = 0; i <= 100; i += 5) {
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+      generationProgress.value = i;
+      estimatedTime.value = ((100 - i) / 100 * 60).round();
+    }
+
+    // 完成生成，使用占位图片
+    generationStatus.value = 'completed';
+    generatedImageUrl.value = 'https://picsum.photos/600/400?random=${DateTime.now().millisecondsSinceEpoch}';
+  }
+
+  /// 下载生成的图片
+  void downloadGeneratedImage() {
+    // TODO: 实现实际下载功能
+    Get.snackbar(
+      '下载成功',
+      '图片已保存到下载文件夹',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: const Color(0xFFF97316).withValues(alpha: 0.9),
+      colorText: Colors.white,
+    );
+  }
+
+  /// 重置生成状态
+  void resetGeneration() {
+    generationStatus.value = 'idle';
+    generationProgress.value = 0;
+    estimatedTime.value = 0;
+    generatedImageUrl.value = '';
   }
 }
 

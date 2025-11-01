@@ -15,11 +15,11 @@ class AppColors {
   static const Color secondaryDark = Color(0xFFF59E0B);
 
   // 中性色 - 亮色主题
-  static const Color lightBackground = Color(0xFFFFFFFF);
+  static const Color lightBackground = Color(0xFFFFFBF0); // 暖白色背景
   static const Color lightForeground = Color(0xFF0F172A);
-  static const Color lightCard = Color(0xFFFFFFFF);
+  static const Color lightCard = Color(0xFFFFFAEB); // 更淡的黄色卡片
   static const Color lightBorder = Color(0xFFE2E8F0);
-  static const Color lightMuted = Color(0xFFF1F5F9);
+  static const Color lightMuted = Color(0xFFFFF8E7);
   static const Color lightMutedForeground = Color(0xFF64748B);
 
   // 中性色 - 暗色主题

@@ -1,14 +1,5 @@
 /// FAQ 数据模型
 class FaqModel {
-  /// ID
-  final int id;
-
-  /// 问题
-  final String question;
-
-  /// 答案
-  final String answer;
-
   const FaqModel({
     required this.id,
     required this.question,
@@ -23,6 +14,15 @@ class FaqModel {
       answer: json['answer'] as String,
     );
   }
+
+  /// ID
+  final int id;
+
+  /// 问题
+  final String question;
+
+  /// 答案
+  final String answer;
 
   /// 转换为 JSON
   Map<String, dynamic> toJson() {

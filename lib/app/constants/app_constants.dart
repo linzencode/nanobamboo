@@ -3,7 +3,7 @@ class AppConstants {
   AppConstants._();
 
   /// 应用名称
-  static const String appName = 'NanoBanana';
+  static const String appName = 'NanoBamboo';
 
   /// 应用版本
   static const String appVersion = '1.0.0';

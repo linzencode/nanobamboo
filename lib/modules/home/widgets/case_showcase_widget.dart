@@ -12,7 +12,6 @@ class CaseShowcaseWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
-    final theme = Theme.of(context);
     final isMobile = ResponsiveUtils.isMobile(context);
 
     return Container(
@@ -27,7 +26,7 @@ class CaseShowcaseWidget extends StatelessWidget {
             children: [
               const SectionTitle(
                 title: '真实世界应用',
-                subtitle: '看看企业如何使用 NanoBanana 简化他们的工作流程',
+                subtitle: '看看企业如何使用 NanoBamboo 简化他们的工作流程',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 64),
@@ -52,8 +51,13 @@ class CaseShowcaseWidget extends StatelessWidget {
                     itemCount: controller.cases.length,
                     itemBuilder: (context, index) {
                       final caseItem = controller.cases[index];
-                      return _buildCaseCard(context, caseItem.title,
-                          caseItem.description, caseItem.image, caseItem.category);
+                      return _buildCaseCard(
+                        context,
+                        caseItem.title,
+                        caseItem.description,
+                        caseItem.image,
+                        caseItem.category,
+                      );
                     },
                   );
                 },
@@ -73,13 +77,25 @@ class CaseShowcaseWidget extends StatelessWidget {
     String category,
   ) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(
+        color: isDark ? theme.cardColor : AppColors.lightCard,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: theme.dividerColor,
+          color: isDark ? theme.dividerColor : const Color(0xFFF0E5C8),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark 
+                ? Colors.black.withValues(alpha: 0.3)
+                : Colors.black.withValues(alpha: 0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
+            spreadRadius: 0,
+          ),
+        ],
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -90,7 +106,7 @@ class CaseShowcaseWidget extends StatelessWidget {
             height: 256,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: theme.colorScheme.surface.withOpacity(0.5),
+              color: theme.colorScheme.surface.withValues(alpha: 0.5),
             ),
             child: Image.asset(
               imagePath,
@@ -120,7 +136,7 @@ class CaseShowcaseWidget extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
+                      color: AppColors.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(100),
                     ),
                     child: Text(
@@ -144,7 +160,7 @@ class CaseShowcaseWidget extends StatelessWidget {
                   Text(
                     description,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
                   const Spacer(),

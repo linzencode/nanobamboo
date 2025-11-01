@@ -1,20 +1,5 @@
 /// 应用场景数据模型
 class CaseModel {
-  /// ID
-  final int id;
-
-  /// 标题
-  final String title;
-
-  /// 描述
-  final String description;
-
-  /// 图片路径
-  final String image;
-
-  /// 分类
-  final String category;
-
   const CaseModel({
     required this.id,
     required this.title,
@@ -33,6 +18,21 @@ class CaseModel {
       category: json['category'] as String,
     );
   }
+
+  /// ID
+  final int id;
+
+  /// 标题
+  final String title;
+
+  /// 描述
+  final String description;
+
+  /// 图片路径
+  final String image;
+
+  /// 分类
+  final String category;
 
   /// 转换为 JSON
   Map<String, dynamic> toJson() {

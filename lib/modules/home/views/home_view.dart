@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nanobamboo/modules/home/controllers/home_controller.dart';
+import 'package:nanobamboo/modules/home/widgets/ai_generator_widget.dart';
 import 'package:nanobamboo/modules/home/widgets/case_showcase_widget.dart';
 import 'package:nanobamboo/modules/home/widgets/faq_widget.dart';
+import 'package:nanobamboo/modules/home/widgets/features_widget.dart';
 import 'package:nanobamboo/modules/home/widgets/footer_widget.dart';
 import 'package:nanobamboo/modules/home/widgets/header_widget.dart';
 import 'package:nanobamboo/modules/home/widgets/hero_widget.dart';
-import 'package:nanobamboo/modules/home/widgets/image_uploader_widget.dart';
 import 'package:nanobamboo/modules/home/widgets/testimonials_widget.dart';
 
 /// 首页视图
@@ -24,22 +25,38 @@ class HomeView extends GetView<HomeController> {
           // 可滚动内容
           Expanded(
             child: SingleChildScrollView(
+              controller: controller.scrollController,
               child: Column(
                 children: [
                   // Hero 首屏
                   const HeroWidget(),
 
-                  // 图片上传
-                  const ImageUploaderWidget(),
+                  // AI 图像生成器（开始使用）
+                  Container(
+                    key: controller.featuresKey,
+                    child: const AiGeneratorWidget(),
+                  ),
+
+                  // 核心功能
+                  const FeaturesWidget(),
 
                   // 案例展示
-                  const CaseShowcaseWidget(),
+                  Container(
+                    key: controller.showcaseKey,
+                    child: const CaseShowcaseWidget(),
+                  ),
 
                   // 用户评价
-                  const TestimonialsWidget(),
+                  Container(
+                    key: controller.testimonialsKey,
+                    child: const TestimonialsWidget(),
+                  ),
 
                   // FAQ
-                  const FaqWidget(),
+                  Container(
+                    key: controller.faqKey,
+                    child: const FaqWidget(),
+                  ),
 
                   // Footer
                   const FooterWidget(),
@@ -77,27 +94,27 @@ class MobileMenuDrawer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildMobileNavLink(context, '功能', () {
-              controller.closeMobileMenu();
+            _buildMobileNavLink(context, '开始使用', () {
+              controller.scrollToSection(controller.featuresKey);
             }),
             const SizedBox(height: 16),
             _buildMobileNavLink(context, '案例', () {
-              controller.closeMobileMenu();
+              controller.scrollToSection(controller.showcaseKey);
             }),
             const SizedBox(height: 16),
             _buildMobileNavLink(context, '评价', () {
-              controller.closeMobileMenu();
+              controller.scrollToSection(controller.testimonialsKey);
             }),
             const SizedBox(height: 16),
             _buildMobileNavLink(context, 'FAQ', () {
-              controller.closeMobileMenu();
+              controller.scrollToSection(controller.faqKey);
             }),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  controller.closeMobileMenu();
+                  controller.scrollToSection(controller.featuresKey);
                 },
                 child: const Text('开始使用'),
               ),
@@ -130,4 +147,3 @@ class MobileMenuDrawer extends StatelessWidget {
     );
   }
 }
-

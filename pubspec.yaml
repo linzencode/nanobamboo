@@ -22,9 +22,6 @@ dependencies:
   # SVG 支持
   flutter_svg: ^2.0.9
   
-  # 字体
-  google_fonts: ^6.1.0
-  
   # 数据持久化
   shared_preferences: ^2.2.2
 
@@ -38,11 +35,4 @@ flutter:
   
   assets:
     - assets/images/
-  
-  fonts:
-    - family: Geist
-      fonts:
-        - asset: fonts/Geist-Regular.ttf
-        - asset: fonts/Geist-Bold.ttf
-          weight: 700
 

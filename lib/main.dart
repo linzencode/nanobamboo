@@ -31,27 +31,29 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeController = Get.find<ThemeController>();
 
-    return Obx(() => GetMaterialApp(
-          title: AppConstants.appName,
-          debugShowCheckedModeBanner: false,
+    return Obx(
+      () => GetMaterialApp(
+        title: AppConstants.appName,
+        debugShowCheckedModeBanner: false,
 
-          // 主题配置
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: themeController.themeMode,
+        // 主题配置
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: themeController.themeMode,
 
-          // 路由配置
-          initialRoute: AppRoutes.initial,
-          getPages: AppPages.routes,
+        // 路由配置
+        initialRoute: AppRoutes.initial,
+        getPages: AppPages.routes,
 
-          // 默认过渡动画
-          defaultTransition: Transition.fade,
-          transitionDuration: AppConstants.mediumAnimationDuration,
+        // 默认过渡动画
+        defaultTransition: Transition.fade,
+        transitionDuration: AppConstants.mediumAnimationDuration,
 
-          // 本地化配置（可选）
-          locale: const Locale('zh', 'CN'),
-          fallbackLocale: const Locale('en', 'US')
-        ));
+        // 本地化配置（可选）
+        locale: const Locale('zh', 'CN'),
+        fallbackLocale: const Locale('en', 'US'),
+      ),
+    );
   }
 }
 

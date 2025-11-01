@@ -63,7 +63,7 @@ class FooterWidget extends StatelessWidget {
 
               // 分隔线
               Divider(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
               ),
 
               const SizedBox(height: 32),
@@ -75,9 +75,9 @@ class FooterWidget extends StatelessWidget {
                     return Column(
                       children: [
                         Text(
-                          '© 2025 NanoBanana. All rights reserved.',
+                          '© 2025 NanoBamboo. All rights reserved.',
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: Colors.white.withOpacity(0.7),
+                            color: Colors.white.withValues(alpha: 0.7),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -91,9 +91,9 @@ class FooterWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '© 2025 NanoBanana. All rights reserved.',
+                        '© 2025 NanoBamboo. All rights reserved.',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                         ),
                       ),
                       _buildSocialLinks(context),
@@ -132,7 +132,7 @@ class FooterWidget extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'NanoBanana',
+              'NanoBamboo',
               style: theme.textTheme.titleLarge?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -144,7 +144,7 @@ class FooterWidget extends StatelessWidget {
         Text(
           '为全球专业人士提供先进的 AI 驱动图像处理。',
           style: theme.textTheme.bodySmall?.copyWith(
-            color: Colors.white.withOpacity(0.7),
+            color: Colors.white.withValues(alpha: 0.7),
           ),
         ),
       ],
@@ -155,7 +155,7 @@ class FooterWidget extends StatelessWidget {
     return _buildFooterSection(
       context,
       '产品',
-      ['功能', '定价', 'API 文档', '博客'],
+      ['开始使用', '定价', 'API 文档', '博客'],
     );
   }
 
@@ -200,18 +200,16 @@ class FooterWidget extends StatelessWidget {
                 child: Text(
                   link,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                   ),
                 ),
               ),
-            )),
+            ),),
       ],
     );
   }
 
   Widget _buildSocialLinks(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -236,7 +234,7 @@ class FooterWidget extends StatelessWidget {
       child: Text(
         label,
         style: theme.textTheme.bodySmall?.copyWith(
-          color: Colors.white.withOpacity(0.7),
+          color: Colors.white.withValues(alpha: 0.7),
         ),
       ),
     );

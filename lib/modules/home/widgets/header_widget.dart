@@ -19,7 +19,7 @@ class HeaderWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor.withOpacity(0.8),
+        color: theme.scaffoldBackgroundColor.withValues(alpha: 0.8),
         border: Border(
           bottom: BorderSide(
             color: theme.dividerColor,
@@ -29,7 +29,7 @@ class HeaderWidget extends StatelessWidget {
       ),
       child: ClipRect(
         child: BackdropFilter(
-          filter: ColorFilter.mode(
+          filter: const ColorFilter.mode(
             Colors.transparent,
             BlendMode.src,
           ),
@@ -59,7 +59,7 @@ class HeaderWidget extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'NanoBanana',
+                      'Nano Bamboo',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -71,27 +71,39 @@ class HeaderWidget extends StatelessWidget {
                 if (!isMobile) ...[
                   Row(
                     children: [
-                      _buildNavLink(context, '功能', () {}),
+                      _buildNavLink(context, '开始使用', () {
+                        controller.scrollToSection(controller.featuresKey);
+                      }),
                       const SizedBox(width: 32),
-                      _buildNavLink(context, '案例', () {}),
+                      _buildNavLink(context, '案例', () {
+                        controller.scrollToSection(controller.showcaseKey);
+                      }),
                       const SizedBox(width: 32),
-                      _buildNavLink(context, '评价', () {}),
+                      _buildNavLink(context, '评价', () {
+                        controller.scrollToSection(controller.testimonialsKey);
+                      }),
                       const SizedBox(width: 32),
-                      _buildNavLink(context, 'FAQ', () {}),
+                      _buildNavLink(context, 'FAQ', () {
+                        controller.scrollToSection(controller.faqKey);
+                      }),
                       const SizedBox(width: 32),
                       // 主题切换按钮
-                      Obx(() => IconButton(
-                            icon: Icon(
-                              themeController.isDarkMode
-                                  ? Icons.light_mode
-                                  : Icons.dark_mode,
-                            ),
-                            onPressed: () => themeController.toggleTheme(),
-                          )),
+                      Obx(
+                        () => IconButton(
+                          icon: Icon(
+                            themeController.isDarkMode
+                                ? Icons.light_mode
+                                : Icons.dark_mode,
+                          ),
+                          onPressed: () => themeController.toggleTheme(),
+                        ),
+                      ),
                       const SizedBox(width: 16),
                       AppButton(
-                        text: '开始使用',
-                        onPressed: () {},
+                        text: '注册/登录',
+                        onPressed: () {
+                          Get.toNamed<dynamic>('/auth');
+                        },
                         isRounded: true,
                       ),
                     ],
@@ -103,22 +115,26 @@ class HeaderWidget extends StatelessWidget {
                   Row(
                     children: [
                       // 主题切换按钮
-                      Obx(() => IconButton(
-                            icon: Icon(
-                              themeController.isDarkMode
-                                  ? Icons.light_mode
-                                  : Icons.dark_mode,
-                            ),
-                            onPressed: () => themeController.toggleTheme(),
-                          )),
-                      Obx(() => IconButton(
-                            icon: Icon(
-                              controller.isMobileMenuOpen.value
-                                  ? Icons.close
-                                  : Icons.menu,
-                            ),
-                            onPressed: controller.toggleMobileMenu,
-                          )),
+                      Obx(
+                        () => IconButton(
+                          icon: Icon(
+                            themeController.isDarkMode
+                                ? Icons.light_mode
+                                : Icons.dark_mode,
+                          ),
+                          onPressed: () => themeController.toggleTheme(),
+                        ),
+                      ),
+                      Obx(
+                        () => IconButton(
+                          icon: Icon(
+                            controller.isMobileMenuOpen.value
+                                ? Icons.close
+                                : Icons.menu,
+                          ),
+                          onPressed: controller.toggleMobileMenu,
+                        ),
+                      ),
                     ],
                   ),
               ],
@@ -172,7 +188,7 @@ class MobileMenuDrawer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildMobileNavLink(context, '功能', () {
+            _buildMobileNavLink(context, '开始使用', () {
               controller.closeMobileMenu();
             }),
             const SizedBox(height: 16),
@@ -226,4 +242,3 @@ class MobileMenuDrawer extends StatelessWidget {
     );
   }
 }
-
