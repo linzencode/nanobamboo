@@ -25,6 +25,12 @@ class EnvService {
   /// GitHub OAuth Client ID
   String get githubClientId => dotenv.env['GITHUB_CLIENT_ID'] ?? '';
 
+  /// Google OAuth Web Client ID
+  String get googleWebClientId => dotenv.env['GOOGLE_WEB_CLIENT_ID'] ?? '';
+
+  /// Google OAuth iOS Client ID
+  String get googleIosClientId => dotenv.env['GOOGLE_IOS_CLIENT_ID'] ?? '';
+
   /// 检查配置是否完整
   bool get isConfigured {
     return supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;

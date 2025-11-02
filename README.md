@@ -73,10 +73,10 @@ SUPABASE_ANON_KEY=your-anon-key-here
 ```
 
 详细配置步骤请参考：
-- 🌟 **[GitHub OAuth 完整实现指南](./docs/oauth/GITHUB_OAUTH_IMPLEMENTATION_GUIDE.md)** - 推荐首读
+- 🌟 **[GitHub OAuth 完整实现指南](./docs/oauth/GITHUB_OAUTH_IMPLEMENTATION_GUIDE.md)** - 推荐
+- 🌟 **[Google OAuth 配置指南](./docs/oauth/GOOGLE_OAUTH_SETUP_GUIDE.md)** - 推荐
 - 📖 [Supabase 配置指南](./docs/setup/SUPABASE_SETUP.md)
 - 📖 [GitHub 登录快速开始](./docs/oauth/QUICKSTART_GITHUB_AUTH.md)
-- 📖 [Google 登录配置](./docs/oauth/GOOGLE_AUTH_SETUP.md)
 - 📚 [查看完整文档目录](./docs/README.md)
 
 ### 3. 安装依赖

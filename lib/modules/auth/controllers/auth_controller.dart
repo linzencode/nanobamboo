@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:nanobamboo/core/services/google_signin_service.dart';  // 不使用 google_sign_in 插件
 import 'package:nanobamboo/core/services/oauth_service.dart';
 import 'package:nanobamboo/core/services/supabase_service.dart';
 import 'package:nanobamboo/main.dart' as main_app;
@@ -14,10 +15,13 @@ class AuthController extends GetxController {
   /// OAuth 服务（flutter_appauth）
   late final OAuthService _oauthService;
 
+  // /// Google 登录服务（不使用 google_sign_in 插件）
+  // late final GoogleSignInService _googleSignInService;
+
   /// Supabase 是否已正确配置
   bool _isSupabaseConfigured = false;
 
-  /// 当前选中的标签页索引（0:GitHub, 1:邮箱, 2:密码）
+  /// 当前选中的标签页索引（0:社交登录, 1:密码登录）
   final selectedTabIndex = 0.obs;
 
   /// 邮箱地址
@@ -26,17 +30,17 @@ class AuthController extends GetxController {
   /// 密码
   final password = ''.obs;
 
-  /// 验证码
-  final verificationCode = ''.obs;
-
   /// 是否显示密码
   final isPasswordVisible = false.obs;
 
   /// 是否正在加载
   final isLoading = false.obs;
 
-  /// 验证码倒计时
+  /// OTP 验证码倒计时
   final countdown = 0.obs;
+
+  /// 验证码
+  final verificationCode = ''.obs;
 
   @override
   void onInit() {
@@ -44,6 +48,11 @@ class AuthController extends GetxController {
     try {
       _supabaseService = Get.find<SupabaseService>();
       _oauthService = OAuthService();
+      // _googleSignInService = GoogleSignInService();  // 不使用 google_sign_in 插件
+      
+      // 初始化 Google 登录服务（不使用）
+      // _googleSignInService.init();
+      
       // 检查 Supabase 是否正确配置
       // 尝试访问 auth 服务来验证配置
       _isSupabaseConfigured = true;
@@ -201,8 +210,15 @@ class AuthController extends GetxController {
     }
   }
 
-  /// Google OAuth 登录
-  Future<void> signInWithGoogle() async {
+  // /// Google 登录（google_sign_in 插件方式 - 不使用）
+  // /// 
+  // /// ✅ 使用 google_sign_in 插件配合 Supabase 服务器端认证
+  // /// 优势：
+  // /// - 跨平台一致体验（Web、iOS、Android）
+  // /// - 更好的错误处理和用户体验
+  // /// - 支持静默登录
+  // /// - 获得更多用户信息
+  /* Future<void> signInWithGoogle() async {
     if (!_checkSupabaseConfig()) return;
 
     // ✅ 检查是否已经登录
@@ -221,17 +237,98 @@ class AuthController extends GetxController {
     try {
       isLoading.value = true;
 
-      final success = await _supabaseService.signInWithGoogle();
+      debugPrint('🚀 开始 Google 登录流程...');
 
-      if (success) {
+      // 1. 使用 google_sign_in 插件进行 Google OAuth
+      final result = await _googleSignInService.signIn();
+
+      if (result == null) {
+        debugPrint('⚠️ Google 登录取消或失败');
         Get.snackbar(
-          '正在跳转',
-          '即将打开 Google 登录页面...',
+          '登录取消',
+          '您取消了 Google 登录',
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 2),
         );
-        // Google OAuth 会跳转到浏览器，回调后会自动更新状态
-        // 不要在这里关闭页面，等待 OAuth 回调完成
+        return;
+      }
+
+      debugPrint('✅ Google OAuth 成功，开始创建 Supabase session...');
+
+      // 2. 使用 Google token 通过 Supabase 创建会话（服务器端认证）
+      final authResponse = await _supabaseService.signInWithGoogleToken(
+        idToken: result.idToken,
+        accessToken: result.accessToken,
+      );
+
+      if (authResponse.user != null) {
+        debugPrint('✅ 登录成功: ${authResponse.user!.email}');
+
+        // 3. 显示成功提示
+        Get.snackbar(
+          '登录成功',
+          '欢迎回来，${authResponse.user!.email ?? "用户"}！',
+          snackPosition: SnackPosition.TOP,
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.green.withValues(alpha: 0.9),
+          colorText: Colors.white,
+        );
+
+        // 4. 关闭登录页，返回首页
+        final navigator = main_app.navigatorKey.currentState;
+        navigator?.pop();
+
+        debugPrint('🎉 Google 登录流程完成！');
+      } else {
+        throw Exception('Supabase session 创建失败');
+      }
+    } on AuthException catch (e) {
+      debugPrint('❌ Google 登录失败 (AuthException): ${e.message}');
+      Get.snackbar(
+        '登录失败',
+        e.message,
+        snackPosition: SnackPosition.TOP,
+        duration: const Duration(seconds: 3),
+      );
+    } catch (e) {
+      debugPrint('❌ Google 登录失败: $e');
+      Get.snackbar(
+        '登录失败',
+        '请稍后重试：$e',
+        snackPosition: SnackPosition.TOP,
+        duration: const Duration(seconds: 3),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  } */
+
+  /// Google OAuth 登录（Supabase 内置方式 - 使用中）
+  /// 
+  /// ⚠️ 使用 Supabase 内置的 OAuth 流程
+  /// 仅用于快速测试或备用方案
+  Future<void> signInWithGoogleOAuth() async {
+    if (!_checkSupabaseConfig()) return;
+
+    // ✅ 检查是否已经登录
+    final currentUser = _supabaseService.currentUser;
+    if (currentUser != null) {
+      debugPrint('💡 用户已登录: ${currentUser.email}，无需重复登录');
+      
+      if (Get.context != null) {
+        Navigator.of(Get.context!).pop();
+      }
+      return;
+    }
+
+    try {
+      isLoading.value = true;
+
+      final success = await _supabaseService.signInWithGoogleOAuth();
+
+      if (success) {
+        debugPrint('Google OAuth 请求成功，等待回调...');
+        // OAuth 会跳转到浏览器，回调后会自动更新状态
       } else {
         Get.snackbar(
           '登录失败',
@@ -256,7 +353,7 @@ class AuthController extends GetxController {
     }
   }
 
-  /// 发送验证码（魔法链接）
+  /// 发送 OTP 验证码
   Future<void> sendVerificationCode() async {
     if (email.value.isEmpty || !GetUtils.isEmail(email.value)) {
       Get.snackbar(
@@ -274,16 +371,15 @@ class AuthController extends GetxController {
 
       await _supabaseService.signInWithMagicLink(email: email.value);
 
+      Get.snackbar(
+        '发送成功',
+        '验证码已发送到您的邮箱',
+        snackPosition: SnackPosition.TOP,
+      );
+
       // 开始倒计时
       countdown.value = 60;
       _startCountdown();
-
-      Get.snackbar(
-        '发送成功',
-        '验证码已发送到您的邮箱，请查收',
-        snackPosition: SnackPosition.TOP,
-        duration: const Duration(seconds: 3),
-      );
     } on AuthException catch (e) {
       Get.snackbar(
         '发送失败',
@@ -301,8 +397,18 @@ class AuthController extends GetxController {
     }
   }
 
-  /// 邮箱验证码登录
-  Future<void> signInWithEmail() async {
+  /// 倒计时
+  void _startCountdown() {
+    Future.delayed(const Duration(seconds: 1), () {
+      if (countdown.value > 0) {
+        countdown.value--;
+        _startCountdown();
+      }
+    });
+  }
+
+  /// 验证 OTP 验证码并登录
+  Future<void> verifyOTPCode() async {
     if (email.value.isEmpty || !GetUtils.isEmail(email.value)) {
       Get.snackbar(
         '提示',
@@ -312,10 +418,10 @@ class AuthController extends GetxController {
       return;
     }
 
-    if (verificationCode.value.length != 6) {
+    if (verificationCode.value.isEmpty) {
       Get.snackbar(
         '提示',
-        '请输入6位验证码',
+        '请输入验证码',
         snackPosition: SnackPosition.TOP,
       );
       return;
@@ -340,17 +446,16 @@ class AuthController extends GetxController {
         // 使用 Flutter 原生 Navigator
         final navigator = main_app.navigatorKey.currentState;
         navigator?.pop();
-
       }
     } on AuthException catch (e) {
       Get.snackbar(
-        '登录失败',
+        '验证失败',
         e.message,
         snackPosition: SnackPosition.TOP,
       );
     } catch (e) {
       Get.snackbar(
-        '登录失败',
+        '验证失败',
         e.toString(),
         snackPosition: SnackPosition.TOP,
       );
@@ -435,19 +540,8 @@ class AuthController extends GetxController {
     }
   }
 
-  /// 倒计时
-  void _startCountdown() {
-    Future.delayed(const Duration(seconds: 1), () {
-      if (countdown.value > 0) {
-        countdown.value--;
-        _startCountdown();
-      }
-    });
-  }
-
   @override
   void onClose() {
-    countdown.value = 0;
     super.onClose();
   }
 }

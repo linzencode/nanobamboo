@@ -163,10 +163,13 @@ class SupabaseService extends GetxService {
     }
   }
 
-  /// Google OAuth 登录
-  Future<bool> signInWithGoogle() async {
+  /// Google OAuth 登录（Supabase 内置方式）
+  /// 
+  /// ⚠️ 此方法使用 Supabase 内置的 OAuth 流程
+  /// 适用场景：快速集成，无需额外依赖
+  Future<bool> signInWithGoogleOAuth() async {
     try {
-      debugPrint('🚀 [Web] 开始 Google OAuth 流程...');
+      debugPrint('🚀 [Supabase OAuth] 开始 Google OAuth 流程...');
       
       // ✅ 先检查是否有现有 session，如果有就先清除
       final currentSession = _client.auth.currentSession;
@@ -185,10 +188,53 @@ class SupabaseService extends GetxService {
         authScreenLaunchMode: LaunchMode.externalApplication,
       );
 
-      debugPrint('✅ [Web] Google OAuth 请求已发送');
+      debugPrint('✅ [Supabase OAuth] Google OAuth 请求已发送');
       return response;
     } catch (e) {
-      debugPrint('❌ [Web] Google OAuth 失败: $e');
+      debugPrint('❌ [Supabase OAuth] Google OAuth 失败: $e');
+      rethrow;
+    }
+  }
+
+  /// Google 登录（google_sign_in 插件 + 服务器端认证）
+  /// 
+  /// ✅ 推荐方式：使用 google_sign_in 插件配合 Supabase 服务器端认证
+  /// 优势：
+  /// - 跨平台一致体验（Web、iOS、Android）
+  /// - 更好的错误处理和用户体验
+  /// - 支持静默登录
+  /// - 获得更多用户信息
+  /// 
+  /// [idToken] Google ID Token（JWT）
+  /// [accessToken] Google Access Token
+  /// 返回登录后的用户信息
+  Future<AuthResponse> signInWithGoogleToken({
+    required String idToken,
+    required String accessToken,
+  }) async {
+    try {
+      debugPrint('🔐 使用 Google Token 登录 Supabase...');
+      
+      // 使用 Google ID Token 和 Access Token 通过 Supabase 创建会话
+      // 这是服务器端认证方式，token 会发送到 Supabase 后端验证
+      final response = await _client.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+
+      if (response.user != null) {
+        debugPrint('✅ Supabase session 创建成功');
+        debugPrint('   用户: ${response.user!.email}');
+        debugPrint('   ID: ${response.user!.id}');
+        debugPrint('   名称: ${response.user!.userMetadata?['full_name']}');
+      } else {
+        debugPrint('⚠️ Supabase session 创建失败，user 为 null');
+      }
+
+      return response;
+    } catch (e) {
+      debugPrint('❌ Google Token 登录失败: $e');
       rethrow;
     }
   }

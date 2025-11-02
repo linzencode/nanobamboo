@@ -8,6 +8,7 @@ import 'package:nanobamboo/app/theme/app_theme.dart';
 import 'package:nanobamboo/app/theme/theme_controller.dart';
 import 'package:nanobamboo/core/services/env_service.dart';
 import 'package:nanobamboo/core/services/supabase_service.dart';
+import 'package:nanobamboo/modules/auth/controllers/auth_controller.dart';
 import 'package:nanobamboo/modules/auth/views/auth_view.dart';
 import 'package:nanobamboo/modules/home/controllers/home_controller.dart';
 import 'package:nanobamboo/modules/home/views/home_view.dart';
@@ -125,6 +126,11 @@ class MyApp extends StatelessWidget {
               settings: settings,
             );
           case '/auth':
+            // ✅ 在跳转到登录页面时注册 AuthController
+            if (!Get.isRegistered<AuthController>()) {
+              Get.put(AuthController());
+              debugPrint('✅ AuthController 已注册');
+            }
             return MaterialPageRoute(
               builder: (_) => const AuthView(),
               settings: settings,

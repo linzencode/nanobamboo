@@ -4,17 +4,8 @@ import 'package:nanobamboo/app/theme/app_colors.dart';
 import 'package:nanobamboo/modules/auth/controllers/auth_controller.dart';
 
 /// 认证页面
-class AuthView extends StatelessWidget {
+class AuthView extends GetView<AuthController> {
   const AuthView({super.key});
-
-  // 获取 AuthController
-  AuthController get controller {
-    // 确保 AuthController 已注册
-    if (!Get.isRegistered<AuthController>()) {
-      Get.put(AuthController());
-    }
-    return Get.find<AuthController>();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,11 +145,7 @@ class AuthView extends StatelessWidget {
   }
 
   Widget _buildTab(
-    BuildContext context,
-    String label,
-    int index,
-    bool isActive,
-  ) {
+      BuildContext context, String label, int index, bool isActive) {
     return GestureDetector(
       onTap: () => controller.switchTab(index),
       child: Container(
@@ -240,7 +227,7 @@ class AuthView extends StatelessWidget {
             child: ElevatedButton(
               onPressed: controller.isLoading.value
                   ? null
-                  : controller.signInWithGoogle,
+                  : controller.signInWithGoogleOAuth,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.black87,

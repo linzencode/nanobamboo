@@ -41,6 +41,9 @@ dependencies:
   # Web OAuth 认证（Flutter Web 专用）
   flutter_web_auth_2: ^3.1.2
   
+  # Google 登录（官方插件，跨平台）
+  google_sign_in: ^6.2.1
+  
   # HTTP 请求
   http: ^1.2.0
   
