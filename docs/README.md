@@ -15,6 +15,14 @@
 ### 🔐 OAuth 和认证 (`oauth/`)
 OAuth 集成、认证流程、第三方登录等相关文档。
 
+#### 📖 核心文档
+- **`GITHUB_OAUTH_IMPLEMENTATION_GUIDE.md`** - 🌟 **GitHub OAuth 完整实现指南**（推荐首读）
+  - 技术选型和架构
+  - 完整实现步骤
+  - 踩过的坑和解决方案
+  - 配置清单和最佳实践
+
+#### 🔧 问题修复
 - `FIX_GITHUB_OAUTH_REDIRECT.md` - GitHub OAuth 重定向修复
 - `FLUTTER_APPAUTH_SETUP.md` - Flutter AppAuth 配置指南
 - `GITHUB_LOGIN_GLOBALKEY_FIX.md` - GitHub 登录 GlobalKey 问题修复
