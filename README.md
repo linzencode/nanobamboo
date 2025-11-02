@@ -10,14 +10,22 @@
 - 🖼️ 图片上传和预览
 - 🤖 AI 图像处理模拟
 - 📊 实时处理结果展示
+- 🔐 **完整的用户认证系统**
+  - Google OAuth 登录（显示用户名和头像）
+  - GitHub OAuth 登录（显示用户名和头像）
+  - 邮箱 OTP 登录
+  - 邮箱密码登录
+  - 登录状态实时响应
+  - 用户菜单和登出功能
 
 ## 技术栈
 
 - **Flutter** - UI 框架
 - **GetX** - 状态管理和路由
+- **Supabase** - 后端服务（认证、数据库）
 - **ducafe_ui_core** - UI 组件库
 - **image_picker** - 图片选择
-- **Google Fonts** - 字体支持
+- **flutter_dotenv** - 环境变量管理
 
 ## 项目结构
 
@@ -42,28 +50,120 @@ lib/
 └── main.dart              # 应用入口
 ```
 
-## 安装步骤
+## 快速开始
 
-1. 确保已安装 Flutter SDK (>=3.2.0)
-2. 克隆项目到本地
-3. 安装依赖：
+### 1. 环境准备
+
+- 确保已安装 Flutter SDK (>=3.2.0)
+- 克隆项目到本地
+
+### 2. 配置环境变量
+
+复制 `env.example` 创建 `.env` 文件：
+
+```bash
+cp env.example .env
+```
+
+编辑 `.env` 文件，填入您的 Supabase 配置：
+
+```bash
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_ANON_KEY=your-anon-key-here
+```
+
+详细配置步骤请参考：
+- 📖 [Supabase 配置指南](./docs/setup/SUPABASE_SETUP.md)
+- 📖 [GitHub 登录配置](./docs/oauth/QUICKSTART_GITHUB_AUTH.md)
+- 📖 [Google 登录配置](./docs/oauth/GOOGLE_AUTH_SETUP.md)
+- 📚 [查看完整文档目录](./docs/README.md)
+
+### 3. 安装依赖
 
 ```bash
 flutter pub get
 ```
 
-## 运行项目
+### 4. 运行项目
+
+#### 方式 1: 使用 VS Code（推荐）
+
+1. 在 VS Code 中打开项目
+2. 按 `F5` 或点击"运行和调试"
+3. 选择 "NanoBamboo (Web - 端口 3000)"
+4. 应用将在 http://localhost:3000 启动
+
+#### 方式 2: 使用脚本
+
+**Mac/Linux:**
+```bash
+./run_web.sh
+```
+
+**Windows:**
+```batch
+run_web.bat
+```
+
+#### 方式 3: 使用 Makefile
 
 ```bash
-# 开发模式运行
-flutter run
+# 运行 Web 应用（开发模式）
+make web
+
+# 运行 Web 应用（Release 模式）
+make web-release
+
+# 运行 iOS
+make ios
+
+# 运行 Android
+make android
+
+# 查看所有命令
+make help
+```
+
+#### 方式 4: 使用命令行
+
+```bash
+# Web 端（端口 3000）
+flutter run -d chrome --web-port=3000
+
+# iOS
+flutter run -d ios
+
+# Android
+flutter run -d android
+```
+
+### 5. 访问应用
+
+打开浏览器访问：**http://localhost:3000**
+
+## 构建项目
+
+```bash
+# 构建 Web
+flutter build web --release
 
 # 构建 APK（Android）
-flutter build apk
+flutter build apk --release
 
 # 构建 iOS
-flutter build ios
+flutter build ios --release
 ```
+
+## 📚 文档
+
+所有技术文档已整理到 `docs/` 目录，按主题分类：
+
+- 🔐 **OAuth 和认证** (`docs/oauth/`) - OAuth 集成、第三方登录配置
+- 🔧 **问题修复** (`docs/fixes/`) - Bug 修复和解决方案
+- ⚙️ **配置设置** (`docs/setup/`) - 环境配置、服务设置
+- 🔄 **迁移重构** (`docs/migration/`) - 项目迁移和架构调整
+
+查看 [完整文档目录](./docs/README.md) 了解更多详情。
 
 ## 开发规范
 

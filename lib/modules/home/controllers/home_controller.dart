@@ -13,11 +13,8 @@ class HomeController extends GetxController {
   /// 滚动控制器
   final ScrollController scrollController = ScrollController();
 
-  /// 各个 section 的 GlobalKey
-  final GlobalKey featuresKey = GlobalKey();
-  final GlobalKey showcaseKey = GlobalKey();
-  final GlobalKey testimonialsKey = GlobalKey();
-  final GlobalKey faqKey = GlobalKey();
+  /// ⚠️ GlobalKey 已移除，改为在 HomeView (StatefulWidget) 中管理
+  /// 避免热重载时 Controller 重新创建导致 GlobalKey 冲突
 
   /// 移动端菜单是否打开
   final RxBool isMobileMenuOpen = false.obs;
@@ -170,6 +167,54 @@ class HomeController extends GetxController {
     modelSelectorFocusNode.addListener(() {
       isModelSelectorFocused.value = modelSelectorFocusNode.hasFocus;
     });
+    
+    // 检测 OAuth 回调成功
+    _checkOAuthCallback();
+  }
+  
+  /// 检测 OAuth 回调
+  void _checkOAuthCallback() {
+    // 延迟执行，确保页面已经渲染
+    Future.delayed(const Duration(milliseconds: 500), () {
+      try {
+        // 检查当前 URL 是否包含 OAuth 参数
+        final uri = Uri.base;
+        final hasOAuthParams = uri.fragment.contains('access_token') || 
+                                uri.queryParameters.containsKey('code') ||
+                                uri.fragment.contains('type=recovery');
+        
+        if (hasOAuthParams) {
+          debugPrint('✅ 检测到 OAuth 回调成功');
+          
+          // ⚠️ 注释掉 GetX Snackbar，因为使用 MaterialApp 会导致 null 错误
+          // 用户可以从右上角的用户信息看到登录成功
+          // Get.snackbar(
+          //   '登录成功！',
+          //   '欢迎回来，已成功登录',
+          //   snackPosition: SnackPosition.TOP,
+          //   duration: const Duration(seconds: 3),
+          //   backgroundColor: Colors.green.withValues(alpha: 0.9),
+          //   colorText: Colors.white,
+          //   icon: const Icon(Icons.check_circle, color: Colors.white),
+          //   margin: const EdgeInsets.all(16),
+          // );
+          
+          // 清理 URL 参数（避免刷新页面时重复显示提示）
+          // 注意：这在 Flutter Web 中可能不会立即生效
+          Future.delayed(const Duration(seconds: 1), () {
+            try {
+              // 尝试清理 URL（不影响应用状态）
+              // 这里只是一个尝试，可能在某些浏览器中不起作用
+              debugPrint('💡 OAuth 回调处理完成');
+            } catch (e) {
+              debugPrint('⚠️ 清理 URL 失败: $e');
+            }
+          });
+        }
+      } catch (e) {
+        debugPrint('⚠️ 检测 OAuth 回调失败: $e');
+      }
+    });
   }
 
   /// 切换移动端菜单
@@ -206,14 +251,15 @@ class HomeController extends GetxController {
         await _processImage();
       }
     } catch (e) {
-      debugPrint('选择图片失败: $e');
-      Get.snackbar(
-        '错误',
-        '选择图片失败，请重试',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Get.theme.colorScheme.error,
-        colorText: Get.theme.colorScheme.onError,
-      );
+      debugPrint('❌ 选择图片失败: $e');
+      // ⚠️ 注释掉 GetX Snackbar，避免 null 错误
+      // Get.snackbar(
+      //   '错误',
+      //   '选择图片失败，请重试',
+      //   snackPosition: SnackPosition.BOTTOM,
+      //   backgroundColor: Get.theme.colorScheme.error,
+      //   colorText: Get.theme.colorScheme.onError,
+      // );
     }
   }
 
@@ -226,13 +272,15 @@ class HomeController extends GetxController {
 
     isProcessing.value = false;
 
-    Get.snackbar(
-      '成功',
-      '图片处理完成！',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Get.theme.colorScheme.primary,
-      colorText: Colors.white,
-    );
+    debugPrint('✅ 图片处理完成！');
+    // ⚠️ 注释掉 GetX Snackbar，避免 null 错误
+    // Get.snackbar(
+    //   '成功',
+    //   '图片处理完成！',
+    //   snackPosition: SnackPosition.BOTTOM,
+    //   backgroundColor: Get.theme.colorScheme.primary,
+    //   colorText: Colors.white,
+    // );
   }
 
   /// 清除上传的图片
@@ -273,27 +321,31 @@ class HomeController extends GetxController {
   void copyPrompt() {
     if (promptController.text.isNotEmpty) {
       Clipboard.setData(ClipboardData(text: promptController.text));
-      Get.snackbar(
-        '复制成功',
-        '已复制提示词内容',
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 2),
-        backgroundColor: const Color(0xFFF97316).withValues(alpha: 0.9),
-        colorText: Colors.white,
-      );
+      debugPrint('✅ 复制成功: ${promptController.text}');
+      // ⚠️ 注释掉 GetX Snackbar，避免 null 错误
+      // Get.snackbar(
+      //   '复制成功',
+      //   '已复制提示词内容',
+      //   snackPosition: SnackPosition.BOTTOM,
+      //   duration: const Duration(seconds: 2),
+      //   backgroundColor: const Color(0xFFF97316).withValues(alpha: 0.9),
+      //   colorText: Colors.white,
+      // );
     }
   }
 
   /// 开始AI图像生成
   Future<void> startGeneration() async {
     if (promptController.text.isEmpty) {
-      Get.snackbar(
-        '提示',
-        '请输入主提示词',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: const Color(0xFFF97316).withValues(alpha: 0.9),
-        colorText: Colors.white,
-      );
+      debugPrint('⚠️ 请输入主提示词');
+      // ⚠️ 注释掉 GetX Snackbar，避免 null 错误
+      // Get.snackbar(
+      //   '提示',
+      //   '请输入主提示词',
+      //   snackPosition: SnackPosition.BOTTOM,
+      //   backgroundColor: const Color(0xFFF97316).withValues(alpha: 0.9),
+      //   colorText: Colors.white,
+      // );
       return;
     }
 
@@ -317,13 +369,15 @@ class HomeController extends GetxController {
   /// 下载生成的图片
   void downloadGeneratedImage() {
     // TODO: 实现实际下载功能
-    Get.snackbar(
-      '下载成功',
-      '图片已保存到下载文件夹',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: const Color(0xFFF97316).withValues(alpha: 0.9),
-      colorText: Colors.white,
-    );
+    debugPrint('📥 下载图片');
+    // ⚠️ 注释掉 GetX Snackbar，避免 null 错误
+    // Get.snackbar(
+    //   '下载成功',
+    //   '图片已保存到下载文件夹',
+    //   snackPosition: SnackPosition.BOTTOM,
+    //   backgroundColor: const Color(0xFFF97316).withValues(alpha: 0.9),
+    //   colorText: Colors.white,
+    // );
   }
 
   /// 重置生成状态

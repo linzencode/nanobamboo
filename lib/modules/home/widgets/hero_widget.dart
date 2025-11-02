@@ -8,7 +8,14 @@ import 'package:nanobamboo/shared/widgets/app_button.dart';
 
 /// Hero 首屏组件
 class HeroWidget extends StatelessWidget {
-  const HeroWidget({super.key});
+  const HeroWidget({
+    super.key,
+    this.featuresKey,
+    this.showcaseKey,
+  });
+
+  final GlobalKey? featuresKey;
+  final GlobalKey? showcaseKey;
 
   @override
   Widget build(BuildContext context) {
@@ -118,8 +125,9 @@ class HeroWidget extends StatelessWidget {
                       AppButton(
                         text: '开始处理',
                         onPressed: () {
-                          Get.find<HomeController>()
-                              .scrollToSection(Get.find<HomeController>().featuresKey);
+                          if (featuresKey != null) {
+                            Get.find<HomeController>().scrollToSection(featuresKey!);
+                          }
                         },
                         type: AppButtonType.primary,
                         isRounded: true,
@@ -127,8 +135,9 @@ class HeroWidget extends StatelessWidget {
                       AppButton(
                         text: '查看演示',
                         onPressed: () {
-                          Get.find<HomeController>()
-                              .scrollToSection(Get.find<HomeController>().showcaseKey);
+                          if (showcaseKey != null) {
+                            Get.find<HomeController>().scrollToSection(showcaseKey!);
+                          }
                         },
                         type: AppButtonType.outline,
                         isRounded: true,

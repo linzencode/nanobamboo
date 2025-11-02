@@ -4,8 +4,17 @@ import 'package:nanobamboo/app/theme/app_colors.dart';
 import 'package:nanobamboo/modules/auth/controllers/auth_controller.dart';
 
 /// 认证页面
-class AuthView extends GetView<AuthController> {
+class AuthView extends StatelessWidget {
   const AuthView({super.key});
+
+  // 获取 AuthController
+  AuthController get controller {
+    // 确保 AuthController 已注册
+    if (!Get.isRegistered<AuthController>()) {
+      Get.put(AuthController());
+    }
+    return Get.find<AuthController>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,41 +89,43 @@ class AuthView extends GetView<AuthController> {
                 const SizedBox(height: 32),
 
                 // 标签页切换
-                Obx(() => Row(
-                      children: [
-                        Expanded(
-                          child: _buildTab(
-                            context,
-                            'Google 登录',
-                            0,
-                            controller.selectedTabIndex.value == 0,
-                          ),
+                Obx(
+                  () => Row(
+                    children: [
+                      Expanded(
+                        child: _buildTab(
+                          context,
+                          '社交登录',
+                          0,
+                          controller.selectedTabIndex.value == 0,
                         ),
-                        Expanded(
-                          child: _buildTab(
-                            context,
-                            '邮箱登录',
-                            1,
-                            controller.selectedTabIndex.value == 1,
-                          ),
+                      ),
+                      Expanded(
+                        child: _buildTab(
+                          context,
+                          '邮箱登录',
+                          1,
+                          controller.selectedTabIndex.value == 1,
                         ),
-                        Expanded(
-                          child: _buildTab(
-                            context,
-                            '密码登录',
-                            2,
-                            controller.selectedTabIndex.value == 2,
-                          ),
+                      ),
+                      Expanded(
+                        child: _buildTab(
+                          context,
+                          '密码登录',
+                          2,
+                          controller.selectedTabIndex.value == 2,
                         ),
-                      ],
-                    ),),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 32),
 
                 // 内容区域
                 Obx(() {
                   switch (controller.selectedTabIndex.value) {
                     case 0:
-                      return _buildGoogleLogin(context);
+                      return _buildSocialLogin(context);
                     case 1:
                       return _buildEmailLogin(context);
                     case 2:
@@ -142,7 +153,12 @@ class AuthView extends GetView<AuthController> {
     );
   }
 
-  Widget _buildTab(BuildContext context, String label, int index, bool isActive) {
+  Widget _buildTab(
+    BuildContext context,
+    String label,
+    int index,
+    bool isActive,
+  ) {
     return GestureDetector(
       onTap: () => controller.switchTab(index),
       child: Container(
@@ -168,55 +184,116 @@ class AuthView extends GetView<AuthController> {
     );
   }
 
-  Widget _buildGoogleLogin(BuildContext context) {
+  Widget _buildSocialLogin(BuildContext context) {
     return Column(
       children: [
-        Obx(() => SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton(
-                onPressed: controller.isLoading.value
-                    ? null
-                    : controller.signInWithGoogle,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFF97316),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 0,
+        // GitHub 登录按钮
+        Obx(
+          () => SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton(
+              onPressed: controller.isLoading.value
+                  ? null
+                  : controller.signInWithGitHub,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF24292e),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: controller.isLoading.value
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
-                    : const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'G',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(width: 12),
-                          Text(
-                            '使用 Google 继续',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
+                elevation: 0,
               ),
-            ),),
+              child: controller.isLoading.value
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.code, size: 20),
+                        SizedBox(width: 12),
+                        Text(
+                          '使用 GitHub 继续',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // Google 登录按钮
+        Obx(
+          () => SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton(
+              onPressed: controller.isLoading.value
+                  ? null
+                  : controller.signInWithGoogle,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black87,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: Color(0xFFE5E7EB)),
+                ),
+                elevation: 0,
+              ),
+              child: controller.isLoading.value
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Colors.black87),
+                      ),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Google 图标（使用 Text emoji 作为简单替代）
+                        Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'G',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF4285F4),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          '使用 Google 继续',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -263,7 +340,8 @@ class AuthView extends GetView<AuthController> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFF97316), width: 2),
+                  borderSide:
+                      const BorderSide(color: Color(0xFFF97316), width: 2),
                 ),
                 filled: true,
                 fillColor: Colors.white,
@@ -274,43 +352,46 @@ class AuthView extends GetView<AuthController> {
         const SizedBox(height: 24),
 
         // 发送验证码按钮
-        Obx(() => SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton(
-                onPressed: controller.isLoading.value || controller.countdown.value > 0
-                    ? null
-                    : controller.sendVerificationCode,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFF97316),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 0,
-                  disabledBackgroundColor: Colors.grey[300],
-                  disabledForegroundColor: Colors.grey[600],
+        Obx(
+          () => SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton(
+              onPressed:
+                  controller.isLoading.value || controller.countdown.value > 0
+                      ? null
+                      : controller.sendVerificationCode,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFF97316),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: controller.isLoading.value
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
-                    : Text(
-                        controller.countdown.value > 0
-                            ? '${controller.countdown.value}秒后重试'
-                            : '发送验证码',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                elevation: 0,
+                disabledBackgroundColor: Colors.grey[300],
+                disabledForegroundColor: Colors.grey[600],
               ),
-            ),),
+              child: controller.isLoading.value
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : Text(
+                      controller.countdown.value > 0
+                          ? '${controller.countdown.value}秒后重试'
+                          : '发送验证码',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+            ),
+          ),
+        ),
         const SizedBox(height: 12),
 
         // 提示文字
@@ -367,7 +448,8 @@ class AuthView extends GetView<AuthController> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFF97316), width: 2),
+                  borderSide:
+                      const BorderSide(color: Color(0xFFF97316), width: 2),
                 ),
                 filled: true,
                 fillColor: Colors.white,
@@ -397,37 +479,40 @@ class AuthView extends GetView<AuthController> {
               ),
             ),
             const SizedBox(height: 8),
-            Obx(() => TextField(
-                  onChanged: (value) => controller.password.value = value,
-                  obscureText: !controller.isPasswordVisible.value,
-                  decoration: InputDecoration(
-                    hintText: '请输入密码',
-                    hintStyle: const TextStyle(color: Colors.black38),
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        controller.isPasswordVisible.value
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                      ),
-                      onPressed: controller.togglePasswordVisibility,
+            Obx(
+              () => TextField(
+                onChanged: (value) => controller.password.value = value,
+                obscureText: !controller.isPasswordVisible.value,
+                decoration: InputDecoration(
+                  hintText: '请输入密码',
+                  hintStyle: const TextStyle(color: Colors.black38),
+                  prefixIcon: const Icon(Icons.lock_outline),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      controller.isPasswordVisible.value
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFFFCD34D)),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFFFCD34D)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFFF97316), width: 2),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
+                    onPressed: controller.togglePasswordVisibility,
                   ),
-                ),),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFFFCD34D)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFFFCD34D)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide:
+                        const BorderSide(color: Color(0xFFF97316), width: 2),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 8),
@@ -449,39 +534,41 @@ class AuthView extends GetView<AuthController> {
         const SizedBox(height: 16),
 
         // 登录按钮
-        Obx(() => SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton(
-                onPressed: controller.isLoading.value
-                    ? null
-                    : controller.signInWithPassword,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFF97316),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 0,
+        Obx(
+          () => SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton(
+              onPressed: controller.isLoading.value
+                  ? null
+                  : controller.signInWithPassword,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFF97316),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: controller.isLoading.value
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
-                    : const Text(
-                        '登录',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                elevation: 0,
               ),
-            ),),
+              child: controller.isLoading.value
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : const Text(
+                      '登录',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+            ),
+          ),
+        ),
         const SizedBox(height: 12),
 
         // 提示文字
@@ -496,4 +583,3 @@ class AuthView extends GetView<AuthController> {
     );
   }
 }
-
