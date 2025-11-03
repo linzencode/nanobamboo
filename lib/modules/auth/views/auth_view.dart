@@ -79,54 +79,13 @@ class AuthView extends GetView<AuthController> {
                 ),
                 const SizedBox(height: 32),
 
-                // 标签页切换
-                Obx(
-                  () => Row(
-                    children: [
-                      Expanded(
-                        child: _buildTab(
-                          context,
-                          '社交登录',
-                          0,
-                          controller.selectedTabIndex.value == 0,
-                        ),
-                      ),
-                      Expanded(
-                        child: _buildTab(
-                          context,
-                          '邮箱登录',
-                          1,
-                          controller.selectedTabIndex.value == 1,
-                        ),
-                      ),
-                      Expanded(
-                        child: _buildTab(
-                          context,
-                          '密码登录',
-                          2,
-                          controller.selectedTabIndex.value == 2,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Google 登录按钮
+                _buildGoogleButton(context),
+                const SizedBox(height: 16),
+
+                // GitHub 登录按钮
+                _buildGitHubButton(context),
                 const SizedBox(height: 32),
-
-                // 内容区域
-                Obx(() {
-                  switch (controller.selectedTabIndex.value) {
-                    case 0:
-                      return _buildSocialLogin(context);
-                    case 1:
-                      return _buildEmailLogin(context);
-                    case 2:
-                      return _buildPasswordLogin(context);
-                    default:
-                      return const SizedBox.shrink();
-                  }
-                }),
-
-                const SizedBox(height: 24),
 
                 // 隐私政策
                 Text(
@@ -144,256 +103,120 @@ class AuthView extends GetView<AuthController> {
     );
   }
 
-  Widget _buildTab(
-      BuildContext context, String label, int index, bool isActive) {
-    return GestureDetector(
-      onTap: () => controller.switchTab(index),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: isActive ? const Color(0xFFF97316) : Colors.transparent,
-              width: 2,
+  /// Google 登录按钮
+  Widget _buildGoogleButton(BuildContext context) {
+    return Obx(
+      () => SizedBox(
+        width: double.infinity,
+        height: 48,
+        child: ElevatedButton(
+          onPressed: controller.isGoogleLoading.value
+              ? null
+              : controller.signInWithGoogleOAuth,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black87,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Color(0xFFE5E7EB)),
             ),
+            elevation: 0,
           ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isActive ? const Color(0xFFF97316) : Colors.black54,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-            fontSize: 14,
-          ),
-          textAlign: TextAlign.center,
+          child: controller.isGoogleLoading.value
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black87),
+                  ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Google 图标
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'G',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF4285F4),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    const Text(
+                      '使用 Google 继续',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );
   }
 
-  Widget _buildSocialLogin(BuildContext context) {
-    return Column(
-      children: [
-        // GitHub 登录按钮
-        Obx(
-          () => SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton(
-              onPressed: controller.isLoading.value
-                  ? null
-                  : controller.signInWithGitHub,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF24292e),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 0,
-              ),
-              child: controller.isLoading.value
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                  : const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.code, size: 20),
-                        SizedBox(width: 12),
-                        Text(
-                          '使用 GitHub 继续',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
+  /// GitHub 登录按钮
+  Widget _buildGitHubButton(BuildContext context) {
+    return Obx(
+      () => SizedBox(
+        width: double.infinity,
+        height: 48,
+        child: ElevatedButton(
+          onPressed: controller.isGitHubLoading.value
+              ? null
+              : controller.signInWithGitHub,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF24292e),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
+            elevation: 0,
           ),
-        ),
-        const SizedBox(height: 16),
-
-        // Google 登录按钮
-        Obx(
-          () => SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton(
-              onPressed: controller.isLoading.value
-                  ? null
-                  : controller.signInWithGoogleOAuth,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black87,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  side: const BorderSide(color: Color(0xFFE5E7EB)),
-                ),
-                elevation: 0,
-              ),
-              child: controller.isLoading.value
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.black87),
-                      ),
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Google 图标（使用 Text emoji 作为简单替代）
-                        Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'G',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF4285F4),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        const Text(
-                          '使用 Google 继续',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildEmailLogin(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // 邮箱输入
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RichText(
-              text: TextSpan(
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w500,
-                ),
-                children: const [
-                  TextSpan(text: '邮箱地址'),
-                  TextSpan(
-                    text: ' *',
-                    style: TextStyle(color: Color(0xFFF97316)),
+          child: controller.isGitHubLoading.value
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              onChanged: (value) => controller.email.value = value,
-              decoration: InputDecoration(
-                hintText: 'your@email.com',
-                hintStyle: const TextStyle(color: Colors.black38),
-                prefixIcon: const Icon(Icons.email_outlined),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFFCD34D)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFFCD34D)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide:
-                      const BorderSide(color: Color(0xFFF97316), width: 2),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 24),
-
-        // 发送验证码按钮
-        Obx(
-          () => SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton(
-              onPressed:
-                  controller.isLoading.value || controller.countdown.value > 0
-                      ? null
-                      : controller.sendVerificationCode,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFF97316),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 0,
-                disabledBackgroundColor: Colors.grey[300],
-                disabledForegroundColor: Colors.grey[600],
-              ),
-              child: controller.isLoading.value
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                  : Text(
-                      controller.countdown.value > 0
-                          ? '${controller.countdown.value}秒后重试'
-                          : '发送验证码',
-                      style: const TextStyle(
+                )
+              : const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.code, size: 20),
+                    SizedBox(width: 12),
+                    Text(
+                      '使用 GitHub 继续',
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-            ),
-          ),
+                  ],
+                ),
         ),
-        const SizedBox(height: 12),
-
-        // 提示文字
-        Text(
-          '我们将向您的邮箱发送一个 6 位数验证码',
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: Colors.black54,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
+      ),
     );
   }
 
-  Widget _buildPasswordLogin(BuildContext context) {
+  // ==================== 密码登录功能（已禁用） ====================
+  // 如需启用，取消下方注释并在 build 方法中调用 _buildPasswordLogin(context)
+  
+  /* Widget _buildPasswordLogin(BuildContext context) {
     final theme = Theme.of(context);
 
     return Column(
@@ -526,7 +349,7 @@ class AuthView extends GetView<AuthController> {
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-              onPressed: controller.isLoading.value
+              onPressed: controller.isPasswordLoading.value
                   ? null
                   : controller.signInWithPassword,
               style: ElevatedButton.styleFrom(
@@ -537,7 +360,7 @@ class AuthView extends GetView<AuthController> {
                 ),
                 elevation: 0,
               ),
-              child: controller.isLoading.value
+              child: controller.isPasswordLoading.value
                   ? const SizedBox(
                       width: 20,
                       height: 20,
@@ -568,5 +391,5 @@ class AuthView extends GetView<AuthController> {
         ),
       ],
     );
-  }
+  } */
 }

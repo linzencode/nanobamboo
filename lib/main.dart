@@ -75,6 +75,13 @@ void main() {
         debugPrint('💡 检测到过期的 Refresh Token（已忽略，这是退出登录后的正常情况）');
         return;
       }
+
+      // 过滤掉 Code verifier 错误（这是 Hot Restart 后 OAuth 回调的正常情况）
+      if (error is AuthException && 
+          error.message.contains('Code verifier could not be found')) {
+        debugPrint('💡 检测到 Code verifier 丢失（已忽略，这是 Hot Restart 后的正常情况）');
+        return;
+      }
       
       // 其他错误仍然记录
       debugPrint('全局错误捕获: $error');

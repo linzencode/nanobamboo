@@ -33,8 +33,17 @@ class AuthController extends GetxController {
   /// 是否显示密码
   final isPasswordVisible = false.obs;
 
-  /// 是否正在加载
-  final isLoading = false.obs;
+  /// Google 登录加载状态
+  final isGoogleLoading = false.obs;
+
+  /// GitHub 登录加载状态
+  final isGitHubLoading = false.obs;
+
+  /// 密码登录加载状态
+  final isPasswordLoading = false.obs;
+
+  /// OTP 验证码加载状态
+  final isOTPLoading = false.obs;
 
   /// OTP 验证码倒计时
   final countdown = 0.obs;
@@ -117,7 +126,7 @@ class AuthController extends GetxController {
     }
 
     try {
-      isLoading.value = true;
+      isGitHubLoading.value = true;
 
       if (kIsWeb) {
         // ==================== Web 平台 ====================
@@ -206,7 +215,7 @@ class AuthController extends GetxController {
         duration: const Duration(seconds: 3),
       );
     } finally {
-      isLoading.value = false;
+      isGitHubLoading.value = false;
     }
   }
 
@@ -322,7 +331,7 @@ class AuthController extends GetxController {
     }
 
     try {
-      isLoading.value = true;
+      isGoogleLoading.value = true;
 
       final success = await _supabaseService.signInWithGoogleOAuth();
 
@@ -349,7 +358,7 @@ class AuthController extends GetxController {
         snackPosition: SnackPosition.TOP,
       );
     } finally {
-      isLoading.value = false;
+      isGoogleLoading.value = false;
     }
   }
 
@@ -367,7 +376,7 @@ class AuthController extends GetxController {
     if (!_checkSupabaseConfig()) return;
 
     try {
-      isLoading.value = true;
+      isOTPLoading.value = true;
 
       await _supabaseService.signInWithMagicLink(email: email.value);
 
@@ -393,7 +402,7 @@ class AuthController extends GetxController {
         snackPosition: SnackPosition.TOP,
       );
     } finally {
-      isLoading.value = false;
+      isOTPLoading.value = false;
     }
   }
 
@@ -430,7 +439,7 @@ class AuthController extends GetxController {
     if (!_checkSupabaseConfig()) return;
 
     try {
-      isLoading.value = true;
+      isOTPLoading.value = true;
 
       final response = await _supabaseService.verifyOTP(
         email: email.value,
@@ -460,7 +469,7 @@ class AuthController extends GetxController {
         snackPosition: SnackPosition.TOP,
       );
     } finally {
-      isLoading.value = false;
+      isOTPLoading.value = false;
     }
   }
 
@@ -487,7 +496,7 @@ class AuthController extends GetxController {
     if (!_checkSupabaseConfig()) return;
 
     try {
-      isLoading.value = true;
+      isPasswordLoading.value = true;
 
       final response = await _supabaseService.signInWithPassword(
         email: email.value,
@@ -518,7 +527,7 @@ class AuthController extends GetxController {
         snackPosition: SnackPosition.TOP,
       );
     } finally {
-      isLoading.value = false;
+      isPasswordLoading.value = false;
     }
   }
 
