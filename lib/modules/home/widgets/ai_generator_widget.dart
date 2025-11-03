@@ -25,9 +25,9 @@ class AiGeneratorWidget extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: 1280),
           child: Column(
             children: [
-              // 上标题
+              // Label
               const Text(
-                '开始使用',
+                'Get Started',
                 style: TextStyle(
                   color: Color(0xFFF97316),
                   fontSize: 14,
@@ -37,9 +37,9 @@ class AiGeneratorWidget extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               
-              // 主标题
+              // Main Title
               Text(
-                '试用 AI 编辑器',
+                'Try AI Editor',
                 style: theme.textTheme.headlineLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: isMobile ? 32 : 42,
@@ -47,9 +47,9 @@ class AiGeneratorWidget extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               
-              // 副标题
+              // Subtitle
               Text(
-                '体验NanoBamboo的自然语言图像编辑能力，用简单的文字命令变换任何照片',
+                'Experience NanoBamboo\'s natural language image editing capabilities, transform any photo with simple text commands',
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
@@ -132,14 +132,14 @@ class AiGeneratorWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    '提示引擎',
+                    'Prompt Engine',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    '用 AI 技术编辑您的图像',
+                    'Edit your images with AI technology',
                     style: TextStyle(
                       fontSize: 12,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
@@ -157,7 +157,7 @@ class AiGeneratorWidget extends StatelessWidget {
                   Expanded(
                     child: _buildModeTab(
                       context,
-                      '图生图',
+                      'Image to Image',
                       true,
                       controller.generationMode.value == 'image',
                       () => controller.generationMode.value = 'image',
@@ -167,7 +167,7 @@ class AiGeneratorWidget extends StatelessWidget {
                   Expanded(
                     child: _buildModeTab(
                       context,
-                      '文生图',
+                      'Text to Image',
                       false,
                       controller.generationMode.value == 'text',
                       () => controller.generationMode.value = 'text',
@@ -202,7 +202,7 @@ class AiGeneratorWidget extends StatelessWidget {
                         child: Row(
                           children: [
                             const Text(
-                              '批量生成',
+                              'Batch Generate',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
@@ -239,7 +239,7 @@ class AiGeneratorWidget extends StatelessWidget {
                             Icon(Icons.upgrade, size: 14, color: Color(0xFFF97316)),
                             SizedBox(width: 4),
                             Text(
-                              '升级',
+                              'Upgrade',
                               style: TextStyle(
                                 color: Color(0xFFF97316),
                                 fontSize: 12,
@@ -254,7 +254,7 @@ class AiGeneratorWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  '批量生成减低单个图片的时长，生成多张级联输出片',
+                  'Batch generation reduces time per image, generates multiple cascaded outputs',
                   style: TextStyle(
                     fontSize: 12,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
@@ -278,7 +278,7 @@ class AiGeneratorWidget extends StatelessWidget {
                     const Icon(Icons.image_outlined, size: 16, color: Color(0xFFF97316)),
                     const SizedBox(width: 8),
                     const Text(
-                      '参考图像',
+                      'Reference Image',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -318,14 +318,14 @@ class AiGeneratorWidget extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           const Text(
-                            '添加图片',
+                            'Add Image',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           Text(
-                            '最大10MB',
+                            'Max 10MB',
                             style: TextStyle(
                               fontSize: 12,
                               color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
@@ -350,7 +350,7 @@ class AiGeneratorWidget extends StatelessWidget {
                   Icon(Icons.edit_note, size: 16, color: Color(0xFFF97316)),
                   SizedBox(width: 8),
                   Text(
-                    '主提示词',
+                    'Main Prompt',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -363,7 +363,7 @@ class AiGeneratorWidget extends StatelessWidget {
                 controller: controller.promptController,
                 maxLines: 5,
                 decoration: InputDecoration(
-                  hintText: '由摄影技术拍摄的未来城市，黄金时段照明，超高清晰度...',
+                  hintText: 'A futuristic city captured by photography, golden hour lighting, ultra-high definition...',
                   hintStyle: TextStyle(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                     fontSize: 14,
@@ -397,7 +397,7 @@ class AiGeneratorWidget extends StatelessWidget {
                     children: [
                       Icon(Icons.content_copy, size: 14),
                       SizedBox(width: 4),
-                      Text('复制', style: TextStyle(fontSize: 12)),
+                      Text('Copy', style: TextStyle(fontSize: 12)),
                     ],
                   ),
                 ),
@@ -420,7 +420,7 @@ class AiGeneratorWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        '想要体验更强大的图像生成功能？',
+                        'Want to experience more powerful image generation?',
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
@@ -430,7 +430,7 @@ class AiGeneratorWidget extends StatelessWidget {
                       GestureDetector(
                         onTap: () {},
                         child: const Text(
-                          '访问完整版生成器 →',
+                          'Visit Full Generator →',
                           style: TextStyle(
                             color: Color(0xFFF97316),
                             fontSize: 13,
@@ -472,7 +472,7 @@ class AiGeneratorWidget extends StatelessWidget {
                   Icon(Icons.auto_awesome, size: 20),
                   SizedBox(width: 8),
                   Text(
-                    '立即生成',
+                    'Generate Now',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -533,14 +533,14 @@ class AiGeneratorWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    '输出画廊',
+                    'Output Gallery',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    '您的内电脑 AI 创作即时显示在这里',
+                    'Your AI creations will be displayed here instantly',
                     style: TextStyle(
                       fontSize: 12,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
@@ -619,7 +619,7 @@ class AiGeneratorWidget extends StatelessWidget {
             ),),
         const SizedBox(height: 8),
         Text(
-          '不同模型具有不同特性和风格',
+          'Different models have different features and styles',
           style: TextStyle(
             fontSize: 12,
             color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
@@ -651,7 +651,7 @@ class AiGeneratorWidget extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              '准备即时生成',
+              'Ready to Generate',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -659,7 +659,7 @@ class AiGeneratorWidget extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              '输入提示词，释放强大力量',
+              'Enter prompts, unleash powerful capabilities',
               style: TextStyle(
                 fontSize: 14,
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
@@ -702,13 +702,13 @@ class AiGeneratorWidget extends StatelessWidget {
           const SizedBox(height: 24),
           // "正在处理您的请求..."
           const Text(
-            '正在处理您的请求...',
+            'Processing your request...',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 8),
           // "光速生成进行中"
           Text(
-            '光速生成进行中',
+            'Lightning-fast generation in progress',
             style: TextStyle(
               fontSize: 14,
               color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
@@ -830,7 +830,7 @@ class AiGeneratorWidget extends StatelessWidget {
                   ),
                 ),
                 alignment: Alignment.center,
-                child: const Text('图片加载失败'),
+                child: const Text('Image loading failed'),
               );
             },
           ),
@@ -850,7 +850,7 @@ class AiGeneratorWidget extends StatelessWidget {
             ),
             icon: const Icon(Icons.download, color: Colors.black87),
             label: const Text(
-              '下载图片',
+              'Download Image',
               style: TextStyle(color: Colors.black87, fontSize: 16),
             ),
           ),

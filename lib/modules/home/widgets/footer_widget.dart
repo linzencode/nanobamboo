@@ -154,24 +154,24 @@ class FooterWidget extends StatelessWidget {
   Widget _buildProductSection(BuildContext context) {
     return _buildFooterSection(
       context,
-      '产品',
-      ['开始使用', '定价', 'API 文档', '博客'],
+      'Product',
+      ['Get Started', 'Pricing', 'API Docs', 'Blog'],
     );
   }
 
   Widget _buildCompanySection(BuildContext context) {
     return _buildFooterSection(
       context,
-      '公司',
-      ['关于', '招聘', '联系', '新闻'],
+      'Company',
+      ['About', 'Careers', 'Contact', 'News'],
     );
   }
 
   Widget _buildLegalSection(BuildContext context) {
     return _buildFooterSection(
       context,
-      '法律',
-      ['隐私', '条款', '安全', 'Cookie'],
+      'Legal',
+      ['Privacy', 'Terms', 'Security', 'Cookie'],
     );
   }
 

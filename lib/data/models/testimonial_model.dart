@@ -1,4 +1,4 @@
-/// 用户评价数据模型
+/// User testimonial data model
 class TestimonialModel {
   const TestimonialModel({
     required this.id,
@@ -9,7 +9,7 @@ class TestimonialModel {
     required this.avatar,
   });
 
-  /// 从 JSON 创建
+  /// Create from JSON
   factory TestimonialModel.fromJson(Map<String, dynamic> json) {
     return TestimonialModel(
       id: json['id'] as int,
@@ -24,22 +24,22 @@ class TestimonialModel {
   /// ID
   final int id;
 
-  /// 姓名
+  /// Name
   final String name;
 
-  /// 角色/职位
+  /// Role/Position
   final String role;
 
-  /// 评价内容
+  /// Review content
   final String content;
 
-  /// 评分
+  /// Rating
   final int rating;
 
-  /// 头像（emoji 或图片路径）
+  /// Avatar (emoji or image path)
   final String avatar;
 
-  /// 转换为 JSON
+  /// Convert to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -51,7 +51,7 @@ class TestimonialModel {
     };
   }
 
-  /// 复制并更新
+  /// Copy with updates
   TestimonialModel copyWith({
     int? id,
     String? name,

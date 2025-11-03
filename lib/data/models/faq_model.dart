@@ -1,4 +1,4 @@
-/// FAQ 数据模型
+/// FAQ data model
 class FaqModel {
   const FaqModel({
     required this.id,
@@ -6,7 +6,7 @@ class FaqModel {
     required this.answer,
   });
 
-  /// 从 JSON 创建
+  /// Create from JSON
   factory FaqModel.fromJson(Map<String, dynamic> json) {
     return FaqModel(
       id: json['id'] as int,
@@ -18,13 +18,13 @@ class FaqModel {
   /// ID
   final int id;
 
-  /// 问题
+  /// Question
   final String question;
 
-  /// 答案
+  /// Answer
   final String answer;
 
-  /// 转换为 JSON
+  /// Convert to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -33,7 +33,7 @@ class FaqModel {
     };
   }
 
-  /// 复制并更新
+  /// Copy with updates
   FaqModel copyWith({
     int? id,
     String? question,

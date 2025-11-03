@@ -94,7 +94,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     
     try {
       final supabaseService = Get.find<SupabaseService>();
-      _authSubscription = supabaseService.authStateChanges.listen((data) {
+      _authSubscription = supabaseService.authStateChanges?.listen((data) {
         if (mounted) {
           // 手动触发重建
           setState(() {});
@@ -173,15 +173,15 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                 if (!isMobile) ...[
                   Row(
                     children: [
-                      _buildNavLink(context, '开始使用', () {
+                      _buildNavLink(context, 'Get Started', () {
                         _homeController.scrollToSection(widget.featuresKey);
                       }),
                       const SizedBox(width: 32),
-                      _buildNavLink(context, '案例', () {
+                      _buildNavLink(context, 'Showcase', () {
                         _homeController.scrollToSection(widget.showcaseKey);
                       }),
                       const SizedBox(width: 32),
-                      _buildNavLink(context, '评价', () {
+                      _buildNavLink(context, 'Reviews', () {
                         _homeController.scrollToSection(widget.testimonialsKey);
                       }),
                       const SizedBox(width: 32),
@@ -216,7 +216,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                         _buildUserMenu(context, _userController!, theme)
                       else
                         AppButton(
-                          text: '注册/登录',
+                          text: 'Sign Up / Login',
                           onPressed: () {
                             Navigator.of(context).pushNamed('/auth');
                           },

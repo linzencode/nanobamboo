@@ -111,7 +111,7 @@ class UserController extends GetxController {
       _authSubscription?.cancel();
 
       // 监听认证状态变化
-      _authSubscription = _supabaseService.authStateChanges.listen((data) {
+      _authSubscription = _supabaseService.authStateChanges?.listen((data) {
         final event = data.event;
         debugPrint('👤 用户状态变化: $event');
 

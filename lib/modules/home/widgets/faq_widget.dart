@@ -26,8 +26,8 @@ class FaqWidget extends StatelessWidget {
           child: Column(
             children: [
               const SectionTitle(
-                title: '常见问题',
-                subtitle: '关于 NanoBamboo 您需要了解的一切',
+                title: 'Frequently Asked Questions',
+                subtitle: 'Everything you need to know about NanoBamboo',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 48),

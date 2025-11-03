@@ -65,7 +65,7 @@ class AuthController extends GetxController {
       // 检查 Supabase 是否正确配置
       // 尝试访问 auth 服务来验证配置
       _isSupabaseConfigured = true;
-      _supabaseService.client.auth.onAuthStateChange.listen((_) {});
+      _supabaseService.client?.auth.onAuthStateChange.listen((_) {});
     } catch (e) {
       debugPrint('⚠️ 无法获取 Supabase 服务或服务未正确配置: $e');
       _isSupabaseConfigured = false;

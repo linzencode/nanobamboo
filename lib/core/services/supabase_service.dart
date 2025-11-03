@@ -6,21 +6,21 @@ import 'package:nanobamboo/core/services/env_service.dart';
 import 'package:nanobamboo/core/utils/storage_helper_stub.dart'
     if (dart.library.html) 'package:nanobamboo/core/utils/storage_helper_web.dart';
 
-/// Supabase 服务
+/// Supabase Service
 class SupabaseService extends GetxService {
-  late final SupabaseClient _client;
+  SupabaseClient? _client;
 
-  /// 获取 Supabase 客户端
-  SupabaseClient get client => _client;
+  /// Get Supabase client
+  SupabaseClient? get client => _client;
 
-  /// 获取当前用户
-  User? get currentUser => _client.auth.currentUser;
+  /// Get current user
+  User? get currentUser => _client?.auth.currentUser;
 
-  /// 是否已登录
+  /// Is authenticated
   bool get isAuthenticated => currentUser != null;
 
-  /// 用户状态流
-  Stream<AuthState> get authStateChanges => _client.auth.onAuthStateChange;
+  /// Auth state stream
+  Stream<AuthState>? get authStateChanges => _client?.auth.onAuthStateChange;
 
   /// 初始化 Supabase
   Future<SupabaseService> init() async {
@@ -57,29 +57,29 @@ class SupabaseService extends GetxService {
       debugPrint('Supabase 初始化成功');
 
       // 监听认证状态变化
-      _client.auth.onAuthStateChange.listen(
+      _client?.auth.onAuthStateChange.listen(
         (data) {
           final event = data.event;
-          debugPrint('认证状态变化: $event');
+          debugPrint('Auth state changed: $event');
 
           if (event == AuthChangeEvent.signedIn) {
-            debugPrint('用户已登录: ${data.session?.user.email}');
+            debugPrint('User signed in: ${data.session?.user.email}');
           } else if (event == AuthChangeEvent.signedOut) {
-            debugPrint('用户已登出');
+            debugPrint('User signed out');
           } else if (event == AuthChangeEvent.tokenRefreshed) {
-            debugPrint('Token 已刷新');
+            debugPrint('Token refreshed');
           }
         },
         onError: (Object error) {
-          // 忽略 Refresh Token 失效的错误（这是退出登录后的正常情况）
+          // Ignore Refresh Token errors (normal after logout)
           if (error is AuthException && 
               error.statusCode == '400' && 
               error.message.contains('Refresh Token')) {
-            debugPrint('💡 检测到过期的 Refresh Token，已自动清除');
+            debugPrint('💡 Expired Refresh Token detected, auto-cleared');
             return;
           }
-          // 其他错误仍然记录
-          debugPrint('⚠️ 认证状态变化错误: $error');
+          // Log other errors
+          debugPrint('⚠️ Auth state change error: $error');
         },
       );
     } catch (e) {
@@ -104,14 +104,14 @@ class SupabaseService extends GetxService {
       
       // ✅ 先检查是否有现有 session，如果有就先清除
       // 避免因 localStorage 中残留的 session 导致直接登录（不跳转授权页）
-      final currentSession = _client.auth.currentSession;
+      final currentSession = _client!.auth.currentSession;
       if (currentSession != null) {
         debugPrint('⚠️ 检测到现有 session，先清除...');
-        await _client.auth.signOut();
+        await _client!.auth.signOut();
         debugPrint('✅ 已清除现有 session');
       }
       
-      final response = await _client.auth.signInWithOAuth(
+      final response = await _client!.auth.signInWithOAuth(
         OAuthProvider.github,
         // Web 端回调到首页，让 auth state listener 处理登录后的状态
         redirectTo: kIsWeb 
@@ -142,7 +142,7 @@ class SupabaseService extends GetxService {
       debugPrint('🔐 [Mobile] 使用 GitHub token 登录 Supabase...');
       
       // 使用 GitHub access_token 通过 Supabase 创建会话
-      final response = await _client.auth.signInWithIdToken(
+      final response = await _client!.auth.signInWithIdToken(
         provider: OAuthProvider.github,
         idToken: accessToken,
         accessToken: accessToken,
@@ -172,14 +172,14 @@ class SupabaseService extends GetxService {
       debugPrint('🚀 [Supabase OAuth] 开始 Google OAuth 流程...');
       
       // ✅ 先检查是否有现有 session，如果有就先清除
-      final currentSession = _client.auth.currentSession;
+      final currentSession = _client!.auth.currentSession;
       if (currentSession != null) {
         debugPrint('⚠️ 检测到现有 session，先清除...');
-        await _client.auth.signOut();
+        await _client!.auth.signOut();
         debugPrint('✅ 已清除现有 session');
       }
       
-      final response = await _client.auth.signInWithOAuth(
+      final response = await _client!.auth.signInWithOAuth(
         OAuthProvider.google,
         // Web 端回调到首页，避免路由跳转导致的 GlobalKey 冲突
         redirectTo: kIsWeb 
@@ -217,7 +217,7 @@ class SupabaseService extends GetxService {
       
       // 使用 Google ID Token 和 Access Token 通过 Supabase 创建会话
       // 这是服务器端认证方式，token 会发送到 Supabase 后端验证
-      final response = await _client.auth.signInWithIdToken(
+      final response = await _client!.auth.signInWithIdToken(
         provider: OAuthProvider.google,
         idToken: idToken,
         accessToken: accessToken,
@@ -245,7 +245,7 @@ class SupabaseService extends GetxService {
     required String password,
   }) async {
     try {
-      final response = await _client.auth.signInWithPassword(
+      final response = await _client!.auth.signInWithPassword(
         email: email,
         password: password,
       );
@@ -262,7 +262,7 @@ class SupabaseService extends GetxService {
     required String email,
   }) async {
     try {
-      await _client.auth.signInWithOtp(
+      await _client!.auth.signInWithOtp(
         email: email,
         emailRedirectTo:
             kIsWeb ? null : 'io.supabase.nanobamboo://login-callback/',
@@ -279,7 +279,7 @@ class SupabaseService extends GetxService {
     required String token,
   }) async {
     try {
-      final response = await _client.auth.verifyOTP(
+      final response = await _client!.auth.verifyOTP(
         type: OtpType.email,
         email: email,
         token: token,
@@ -298,7 +298,7 @@ class SupabaseService extends GetxService {
     required String password,
   }) async {
     try {
-      final response = await _client.auth.signUp(
+      final response = await _client!.auth.signUp(
         email: email,
         password: password,
       );
@@ -314,7 +314,7 @@ class SupabaseService extends GetxService {
   Future<void> signOut() async {
     try {
       // Supabase 会自动清除 localStorage 中的 session
-      await _client.auth.signOut();
+      await _client!.auth.signOut();
       debugPrint('✅ Supabase session 已清除');
       
       // ✅ Web 端额外清除 localStorage（确保彻底清除）
@@ -336,7 +336,7 @@ class SupabaseService extends GetxService {
   /// 刷新会话
   Future<AuthResponse?> refreshSession() async {
     try {
-      final response = await _client.auth.refreshSession();
+      final response = await _client!.auth.refreshSession();
       return response;
     } catch (e) {
       debugPrint('刷新会话失败: $e');
@@ -347,7 +347,7 @@ class SupabaseService extends GetxService {
   /// 重置密码
   Future<void> resetPasswordForEmail(String email) async {
     try {
-      await _client.auth.resetPasswordForEmail(
+      await _client!.auth.resetPasswordForEmail(
         email,
         redirectTo: kIsWeb ? null : 'io.supabase.nanobamboo://reset-password/',
       );
@@ -360,7 +360,7 @@ class SupabaseService extends GetxService {
   /// 更新密码
   Future<UserResponse> updatePassword(String newPassword) async {
     try {
-      final response = await _client.auth.updateUser(
+      final response = await _client!.auth.updateUser(
         UserAttributes(password: newPassword),
       );
 

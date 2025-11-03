@@ -25,8 +25,8 @@ class CaseShowcaseWidget extends StatelessWidget {
           child: Column(
             children: [
               const SectionTitle(
-                title: '真实世界应用',
-                subtitle: '看看企业如何使用 NanoBamboo 简化他们的工作流程',
+                title: 'Real World Applications',
+                subtitle: 'See how businesses use NanoBamboo to simplify their workflows',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 64),
@@ -168,7 +168,7 @@ class CaseShowcaseWidget extends StatelessWidget {
                   // 了解更多
                   TextButton.icon(
                     onPressed: () {},
-                    icon: const Text('了解更多'),
+                    icon: const Text('Learn More'),
                     label: const Icon(Icons.arrow_forward, size: 16),
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.primary,

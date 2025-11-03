@@ -25,8 +25,8 @@ class TestimonialsWidget extends StatelessWidget {
           child: Column(
             children: [
               const SectionTitle(
-                title: '全球用户喜爱',
-                subtitle: '加入数千名信任 NanoBamboo 满足其图像处理需求的专业人士',
+                title: 'Loved by Users Worldwide',
+                subtitle: 'Join thousands of professionals who trust NanoBamboo for their image processing needs',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 64),

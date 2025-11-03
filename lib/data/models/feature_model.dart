@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// 功能模型
+/// Feature model
 class FeatureModel {
   FeatureModel({
     required this.title,

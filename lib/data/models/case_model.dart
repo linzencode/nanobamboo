@@ -1,4 +1,4 @@
-/// 应用场景数据模型
+/// Use case data model
 class CaseModel {
   const CaseModel({
     required this.id,
@@ -8,7 +8,7 @@ class CaseModel {
     required this.category,
   });
 
-  /// 从 JSON 创建
+  /// Create from JSON
   factory CaseModel.fromJson(Map<String, dynamic> json) {
     return CaseModel(
       id: json['id'] as int,
@@ -22,19 +22,19 @@ class CaseModel {
   /// ID
   final int id;
 
-  /// 标题
+  /// Title
   final String title;
 
-  /// 描述
+  /// Description
   final String description;
 
-  /// 图片路径
+  /// Image path
   final String image;
 
-  /// 分类
+  /// Category
   final String category;
 
-  /// 转换为 JSON
+  /// Convert to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -45,7 +45,7 @@ class CaseModel {
     };
   }
 
-  /// 复制并更新
+  /// Copy with updates
   CaseModel copyWith({
     int? id,
     String? title,

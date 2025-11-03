@@ -24,6 +24,21 @@ class _HomeViewState extends State<HomeView> {
   final GlobalKey _showcaseKey = GlobalKey();
   final GlobalKey _testimonialsKey = GlobalKey();
   final GlobalKey _faqKey = GlobalKey();
+  
+  // ✅ 在 State 中管理 ScrollController，避免多个 ScrollPosition 共享
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +61,7 @@ class _HomeViewState extends State<HomeView> {
               // 可滚动内容
               Expanded(
                 child: SingleChildScrollView(
-                  controller: controller.scrollController,
+                  controller: _scrollController,
                   child: Column(
                     children: [
                       // Hero 首屏（传递 GlobalKey）
@@ -55,7 +70,7 @@ class _HomeViewState extends State<HomeView> {
                         showcaseKey: _showcaseKey,
                       ),
 
-                      // AI 图像生成器（开始使用）
+                      // AI 图像生成器（Get Started）
                       Container(
                         key: _featuresKey,
                         child: const AiGeneratorWidget(),
@@ -64,13 +79,13 @@ class _HomeViewState extends State<HomeView> {
                       // 核心功能
                       const FeaturesWidget(),
 
-                      // 案例展示
+                      // Cases展示
                       Container(
                         key: _showcaseKey,
                         child: const CaseShowcaseWidget(),
                       ),
 
-                      // 用户评价
+                      // 用户Reviews
                       Container(
                         key: _testimonialsKey,
                         child: const TestimonialsWidget(),
@@ -164,17 +179,17 @@ class _MobileMenuDrawerState extends State<MobileMenuDrawer> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                    _buildMobileNavLink(context, '开始使用', () {
+                    _buildMobileNavLink(context, 'Get Started', () {
                       _controller.closeMobileMenu();
                       _controller.scrollToSection(widget.featuresKey);
                     }),
                     const SizedBox(height: 16),
-                    _buildMobileNavLink(context, '案例', () {
+                    _buildMobileNavLink(context, 'Cases', () {
                       _controller.closeMobileMenu();
                       _controller.scrollToSection(widget.showcaseKey);
                     }),
                     const SizedBox(height: 16),
-                    _buildMobileNavLink(context, '评价', () {
+                    _buildMobileNavLink(context, 'Reviews', () {
                       _controller.closeMobileMenu();
                       _controller.scrollToSection(widget.testimonialsKey);
                     }),
@@ -191,7 +206,7 @@ class _MobileMenuDrawerState extends State<MobileMenuDrawer> {
                           _controller.closeMobileMenu();
                           _controller.scrollToSection(widget.featuresKey);
                         },
-                        child: const Text('开始使用'),
+                        child: const Text('Get Started'),
                       ),
                     ),
                   ],

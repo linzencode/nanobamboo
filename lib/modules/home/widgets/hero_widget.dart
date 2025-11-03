@@ -6,7 +6,7 @@ import 'package:nanobamboo/core/utils/responsive_utils.dart';
 import 'package:nanobamboo/modules/home/controllers/home_controller.dart';
 import 'package:nanobamboo/shared/widgets/app_button.dart';
 
-/// Hero 首屏组件
+/// Hero Section Widget
 class HeroWidget extends StatelessWidget {
   const HeroWidget({
     super.key,
@@ -29,7 +29,7 @@ class HeroWidget extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // 装饰性渐变背景
+          // Decorative gradient background
           Positioned(
             left: 0,
             top: 80,
@@ -69,16 +69,16 @@ class HeroWidget extends StatelessWidget {
             ),
           ),
 
-          // 主要内容
+          // Main content
           Center(
             child: Container(
               constraints: const BoxConstraints(maxWidth: 896),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // 标题
+                  // Title
                   Text(
-                    '用 AI 智能转换您的图片',
+                    'Transform Your Images with AI',
                     style: isMobile
                         ? AppTextStyles.h2.copyWith(
                             color: theme.colorScheme.onSurface,
@@ -89,21 +89,11 @@ class HeroWidget extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
 
-                  // 主色调文字
-                  const SizedBox(height: 8),
-                  Text(
-                    '',
-                    style: isMobile
-                        ? AppTextStyles.h2.copyWith(color: AppColors.primary)
-                        : AppTextStyles.h1.copyWith(color: AppColors.primary),
-                    textAlign: TextAlign.center,
-                  ),
-
                   const SizedBox(height: 24),
 
-                  // 副标题
+                  // Subtitle
                   Text(
-                    '专业级图像处理，由前沿 AI 驱动。上传、分析并在几秒钟内增强您的图像。',
+                    'Professional image processing powered by cutting-edge AI. Upload, analyze, and enhance your images in seconds.',
                     style: isMobile
                         ? AppTextStyles.bodyMedium.copyWith(
                             color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
@@ -116,14 +106,14 @@ class HeroWidget extends StatelessWidget {
 
                   const SizedBox(height: 32),
 
-                  // CTA 按钮
+                  // CTA Buttons
                   Wrap(
                     spacing: 16,
                     runSpacing: 16,
                     alignment: WrapAlignment.center,
                     children: [
                       AppButton(
-                        text: '开始处理',
+                        text: 'Get Started',
                         onPressed: () {
                           if (featuresKey != null) {
                             Get.find<HomeController>().scrollToSection(featuresKey!);
@@ -133,7 +123,7 @@ class HeroWidget extends StatelessWidget {
                         isRounded: true,
                       ),
                       AppButton(
-                        text: '查看演示',
+                        text: 'View Demo',
                         onPressed: () {
                           if (showcaseKey != null) {
                             Get.find<HomeController>().scrollToSection(showcaseKey!);

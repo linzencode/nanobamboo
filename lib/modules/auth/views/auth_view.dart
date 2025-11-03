@@ -58,7 +58,7 @@ class AuthView extends GetView<AuthController> {
                     ),
                     children: const [
                       TextSpan(
-                        text: '欢迎来到 ',
+                        text: 'Welcome to ',
                         style: TextStyle(color: Colors.black87),
                       ),
                       TextSpan(
@@ -72,7 +72,7 @@ class AuthView extends GetView<AuthController> {
 
                 // 副标题
                 Text(
-                  '登录以继续使用 AI 图像编辑器',
+                  'Login to continue using AI Image Editor',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.black54,
                   ),
@@ -89,7 +89,7 @@ class AuthView extends GetView<AuthController> {
 
                 // 隐私政策
                 Text(
-                  '登录即表示您同意我们的服务条款和隐私政策',
+                  'By logging in, you agree to our Terms of Service and Privacy Policy',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: Colors.black45,
                   ),
@@ -106,64 +106,64 @@ class AuthView extends GetView<AuthController> {
   /// Google 登录按钮
   Widget _buildGoogleButton(BuildContext context) {
     return Obx(
-      () => SizedBox(
-        width: double.infinity,
-        height: 48,
-        child: ElevatedButton(
+          () => SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton(
           onPressed: controller.isGoogleLoading.value
-              ? null
-              : controller.signInWithGoogleOAuth,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black87,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              side: const BorderSide(color: Color(0xFFE5E7EB)),
-            ),
-            elevation: 0,
-          ),
+                  ? null
+                  : controller.signInWithGoogleOAuth,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black87,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: Color(0xFFE5E7EB)),
+                ),
+                elevation: 0,
+              ),
           child: controller.isGoogleLoading.value
-              ? const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black87),
-                  ),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Google 图标
-                    Container(
+                  ? const SizedBox(
                       width: 20,
                       height: 20,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black87),
                       ),
-                      child: const Center(
-                        child: Text(
-                          'G',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4285F4),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                    // Google 图标
+                        Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'G',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF4285F4),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          'Continue with Google',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 12),
-                    const Text(
-                      '使用 Google 继续',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-        ),
-      ),
+            ),
+          ),
     );
   }
 
@@ -200,13 +200,13 @@ class AuthView extends GetView<AuthController> {
                     Icon(Icons.code, size: 20),
                     SizedBox(width: 12),
                     Text(
-                      '使用 GitHub 继续',
+                      'Continue with GitHub',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
-                    ),
-                  ],
+        ),
+      ],
                 ),
         ),
       ),
@@ -233,7 +233,7 @@ class AuthView extends GetView<AuthController> {
                   fontWeight: FontWeight.w500,
                 ),
                 children: const [
-                  TextSpan(text: '邮箱地址'),
+                  TextSpan(text: 'Email Address'),
                   TextSpan(
                     text: ' *',
                     style: TextStyle(color: Color(0xFFF97316)),
@@ -280,7 +280,7 @@ class AuthView extends GetView<AuthController> {
                   fontWeight: FontWeight.w500,
                 ),
                 children: const [
-                  TextSpan(text: '密码'),
+                  TextSpan(text: 'Password'),
                   TextSpan(
                     text: ' *',
                     style: TextStyle(color: Color(0xFFF97316)),
@@ -294,7 +294,7 @@ class AuthView extends GetView<AuthController> {
                 onChanged: (value) => controller.password.value = value,
                 obscureText: !controller.isPasswordVisible.value,
                 decoration: InputDecoration(
-                  hintText: '请输入密码',
+                  hintText: 'Enter your password',
                   hintStyle: const TextStyle(color: Colors.black38),
                   prefixIcon: const Icon(Icons.lock_outline),
                   suffixIcon: IconButton(
@@ -338,7 +338,7 @@ class AuthView extends GetView<AuthController> {
               foregroundColor: const Color(0xFFF97316),
               padding: EdgeInsets.zero,
             ),
-            child: const Text('忘记密码?'),
+            child: const Text('Forgot Password?'),
           ),
         ),
         const SizedBox(height: 16),
@@ -370,7 +370,7 @@ class AuthView extends GetView<AuthController> {
                       ),
                     )
                   : const Text(
-                      '登录',
+                      'Login',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -383,7 +383,7 @@ class AuthView extends GetView<AuthController> {
 
         // 提示文字
         Text(
-          '还没设置密码？登录后可以在中心设置',
+          'Haven'''t set a password? You can set it in your account center after login',
           style: theme.textTheme.bodySmall?.copyWith(
             color: Colors.black54,
           ),
