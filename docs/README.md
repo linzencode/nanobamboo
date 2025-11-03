@@ -21,9 +21,13 @@ OAuth 集成、认证流程、第三方登录等相关文档。
   - 完整实现步骤
   - 踩过的坑和解决方案
   - 配置清单和最佳实践
-- **`GOOGLE_OAUTH_SETUP_GUIDE.md`** - 🌟 **Google OAuth 配置指南**（推荐）
-  - google_sign_in + Supabase 服务器端认证
+- **`GOOGLE_OAUTH_IMPLEMENTATION_GUIDE.md`** - 🌟 **Google OAuth 完整实现指南**（新）
+  - Supabase 内置 OAuth 实现
   - Google Cloud Console 完整配置
+  - 完整代码实现和最佳实践
+  - 踩坑经验和问题排查
+- **`GOOGLE_OAUTH_SETUP_GUIDE.md`** - 📘 **Google OAuth 配置指南**
+  - google_sign_in + Supabase 服务器端认证（备选方案）
   - 跨平台实现（Web、iOS、Android）
   - 常见问题解决方案
 - `GOOGLE_OAUTH_QUICKSTART.md` - ⚡ Google OAuth 快速开始（5分钟配置）
